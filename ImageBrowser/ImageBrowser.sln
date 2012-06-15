@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageBrowser", "ImageBrowser\ImageBrowser.csproj", "{878E72DC-523E-4A8D-B0EA-EA1EDA4DA644}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6D4F29BD-2E16-4467-B115-6AE4F002B20D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageBrowserLogic", "ImageBrowserLogic\ImageBrowserLogic.csproj", "{C7F42E05-9454-4AE0-BEC3-39A092725805}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageBrowserLogicTests", "ImageBrowserLogicTests\ImageBrowserLogicTests.csproj", "{9BFBAFCD-1913-4F98-BA00-C1A455DB7309}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{878E72DC-523E-4A8D-B0EA-EA1EDA4DA644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{878E72DC-523E-4A8D-B0EA-EA1EDA4DA644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{878E72DC-523E-4A8D-B0EA-EA1EDA4DA644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{878E72DC-523E-4A8D-B0EA-EA1EDA4DA644}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BFBAFCD-1913-4F98-BA00-C1A455DB7309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BFBAFCD-1913-4F98-BA00-C1A455DB7309}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BFBAFCD-1913-4F98-BA00-C1A455DB7309}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BFBAFCD-1913-4F98-BA00-C1A455DB7309}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F42E05-9454-4AE0-BEC3-39A092725805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F42E05-9454-4AE0-BEC3-39A092725805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F42E05-9454-4AE0-BEC3-39A092725805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F42E05-9454-4AE0-BEC3-39A092725805}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
