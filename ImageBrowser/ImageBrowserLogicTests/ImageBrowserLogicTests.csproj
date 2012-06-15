@@ -36,6 +36,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,6 +52,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ThumbnailControlShould.cs" />
+    <Compile Include="ThumbnailsShould.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -85,6 +88,10 @@
     <ProjectReference Include="..\ImageBrowserLogic\ImageBrowserLogic.csproj">
       <Project>{C7F42E05-9454-4AE0-BEC3-39A092725805}</Project>
       <Name>ImageBrowserLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImageBrowserPresenter\ImageBrowserPresenter.csproj">
+      <Project>{E6813F44-EA14-40AE-B974-52E15478015E}</Project>
+      <Name>ImageBrowserPresenter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
