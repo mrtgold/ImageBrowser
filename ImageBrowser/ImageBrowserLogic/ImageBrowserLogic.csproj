@@ -43,7 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DirectoryTree.cs" />
+    <Compile Include="DirectoryNode.cs" />
+    <Compile Include="DirectoryTree.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FileNode.cs" />
+    <Compile Include="FileSet.cs" />
     <Compile Include="FullSizeImageGetter.cs" />
     <Compile Include="IImageProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +65,12 @@
     <EmbeddedResource Include="ThumbnailControl.resx">
       <DependentUpon>ThumbnailControl.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BrowserResources\BrowserResources.csproj">
+      <Project>{5d2b5c2e-108d-4b6d-9962-c308fa775a7a}</Project>
+      <Name>BrowserResources</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,9 +10,12 @@ namespace ImageBrowserLogicTests
         [Test]
         public void BindToThumbnailData()
         {
-            var t = new ThumbnailControl();
-            //t.DataBindings.Add(new Binding("",new DataSource()))
+            using (var t = new ThumbnailControl())
+            {
+
+                //t.DataBindings.Add(new Binding("",new DataSource()))
+            }
         }
-        
+
     }
 }

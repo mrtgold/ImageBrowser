@@ -5,6 +5,39 @@ using NUnit.Framework;
 namespace ImageBrowserLogicTests
 {
     [TestFixture]
+    public class ThumbnailShould
+    {
+        [Test]
+        public void ValidateEquality()
+        {
+            var one = new Thumbnail("1","dir");
+            var oneRef = one;
+            var oneToo = new Thumbnail("1", "dir");
+            var two = new Thumbnail("2", "dir2");
+
+            Assert.IsTrue(one.Equals(oneRef));
+            oneRef = null;
+            // ReSharper disable ExpressionIsAlwaysNull
+            Assert.IsFalse(one.Equals(oneRef));
+            // ReSharper restore ExpressionIsAlwaysNull
+            Assert.AreEqual(one, oneToo);
+            Assert.AreEqual(one.GetHashCode(), oneToo.GetHashCode());
+            Assert.AreEqual(one.ToString(), oneToo.ToString());
+
+            Assert.AreNotEqual(one, two);
+            var shouldBeTrue = one == oneToo;
+            Assert.IsTrue(shouldBeTrue);
+
+            var shouldBeFalse = one != oneToo;
+            Assert.IsFalse(shouldBeFalse);
+
+            Assert.IsFalse(one.Equals(new object()));
+
+        }
+
+    }
+
+    [TestFixture]
     public class ThumbnailsShould
     {
         [Test]
