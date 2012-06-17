@@ -10,10 +10,18 @@ namespace ImageBrowserLogic
     {
         public DirectoryTree()
         {
-            //CollapseAll();
             ImageList = DirectoryBrowserImageList.GetImageList();
         }
 
+        public void InitDrives()
+        {
+            foreach (var d in DriveInfo.GetDrives().Where(d => d.DriveType == DriveType.Fixed))
+            {
+                Nodes.Add(new DirectoryNode(d));
+            }
+        }
+
+        #region Events
         public delegate void DirectorySelectedHandler(DirectoryInfo dir);
 
         public DirectorySelectedHandler DirectorySelected;
@@ -25,8 +33,13 @@ namespace ImageBrowserLogic
             node.BeforeExpand();
 
             base.OnBeforeExpand(e);
-            node.UpdateImage();
+            UpdateImages(e.Node);
+        }
 
+        protected override void OnAfterExpand(TreeViewEventArgs e)
+        {
+            base.OnAfterExpand(e);
+            UpdateImages(e.Node);
         }
 
         protected override void OnBeforeSelect(TreeViewCancelEventArgs e)
@@ -34,10 +47,31 @@ namespace ImageBrowserLogic
             if (!e.Node.IsExpanded)
                 e.Node.Expand();
 
-            var node = GetDirectoryNode(e.Node);
-
-            OnDirectorySelected(node.RootDir);
             base.OnBeforeSelect(e);
+            UpdateImages(e.Node);
+        }
+
+        protected override void OnAfterSelect(TreeViewEventArgs e)
+        {
+            var node = GetDirectoryNode(e.Node);
+            OnDirectorySelected(node.RootDir);
+            base.OnAfterSelect(e);
+
+            UpdateImages(e.Node);
+        }
+
+        private void OnDirectorySelected(DirectoryInfo dir)
+        {
+            if (DirectorySelected != null)
+                DirectorySelected(dir);
+        }
+        
+        #endregion
+
+        #region Helpers
+        private static void UpdateImages(TreeNode treeNode)
+        {
+            var node = GetDirectoryNode(treeNode);
             node.UpdateImage();
         }
 
@@ -49,26 +83,6 @@ namespace ImageBrowserLogic
             return node;
         }
 
-        private void OnDirectorySelected(DirectoryInfo dir)
-        {
-            if (DirectorySelected != null)
-                DirectorySelected(dir);
-        }
-
-        protected override void OnAfterExpand(TreeViewEventArgs e)
-        {
-            var node = GetDirectoryNode(e.Node);
-            node.UpdateImage();
-
-            base.OnAfterExpand(e);
-        }
-
-        public void InitDrives()
-        {
-            foreach (var d in DriveInfo.GetDrives().Where(d => d.DriveType == DriveType.Fixed))
-            {
-                Nodes.Add(new DirectoryNode(d));
-            }
-        }
+        #endregion
     }
 }

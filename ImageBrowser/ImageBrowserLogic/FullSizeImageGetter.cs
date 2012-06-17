@@ -1,51 +1,31 @@
 using System;
 using System.Drawing;
-using System.IO;
-using System.Threading;
 
 namespace ImageBrowserLogic
 {
     public class FullSizeImageGetter : IImageProvider
     {
-        private ImageGetterAsyncResult _result;
+        private readonly AsyncImageFromFileCaller _imageGetter;
+
+        public FullSizeImageGetter()
+        {
+            _imageGetter = Image.FromFile;
+        }
+
+        private delegate Image AsyncImageFromFileCaller(string filename);
 
         public IAsyncResult BeginGetImage(AsyncCallback callback, string filename)
         {
-            _result = new ImageGetterAsyncResult
-                                        {
-                                            FileName = filename,
-                                            Image = Image.FromFile(filename),
-                                            IsCompleted = true
-                                        };
+            var result = _imageGetter.BeginInvoke(filename, callback,filename);
 
-            _result.WaitHandle.Set();
-            return _result;
+            return result;
         }
 
         public Image EndGetImage(IAsyncResult asyncResult)
         {
-            // var fs = new FileStream("",FileMode.CreateNew).BeginRead(null,0,0,null,null);
-            //  throw new NotImplementedException();
-            var image = ((ImageGetterAsyncResult)asyncResult).Image;
+
+            var image = _imageGetter.EndInvoke(asyncResult);
             return image;
-        }
-
-        private class ImageGetterAsyncResult : IAsyncResult
-        {
-            internal readonly ManualResetEvent WaitHandle = new ManualResetEvent(false);
-            public bool IsCompleted { get; set; }
-
-            public WaitHandle AsyncWaitHandle { get { return WaitHandle; } }
-            public object AsyncState
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            public bool CompletedSynchronously { get { throw new NotImplementedException(); } }
-            public Image Image;
-            public string FileName;
         }
 
     }

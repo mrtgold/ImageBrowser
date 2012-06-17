@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Class2.cs" />
     <Compile Include="DirectoryNodeShould.cs" />
     <Compile Include="DirectoryTester.cs" />
     <Compile Include="DirectoryTreeShould.cs" />
@@ -89,6 +90,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BrowserResources\BrowserResources.csproj">
+      <Project>{5d2b5c2e-108d-4b6d-9962-c308fa775a7a}</Project>
+      <Name>BrowserResources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImageBrowserLogic\ImageBrowserLogic.csproj">
       <Project>{C7F42E05-9454-4AE0-BEC3-39A092725805}</Project>
       <Name>ImageBrowserLogic</Name>

@@ -19,7 +19,7 @@ namespace ImageBrowserLogicTests
         public void Make()
         {
             var fileSet = new FileSet(TargetDirectory);
-            var expected = TargetDirectory.GetFiles().Select(f => new FileNode(f, fileSet));
+            var expected = TargetDirectory.GetFiles().Select(f => new FileNode(f, fileSet, BrowserResources.Properties.Resources.Image_File));
             CollectionAssert.AreEquivalent(expected,fileSet);
         }
 
@@ -29,7 +29,7 @@ namespace ImageBrowserLogicTests
             const string filePattern = "*.txt";
             var fileSet = new FileSet(TargetDirectory, filePattern);
 
-            var expected = TargetDirectory.GetFiles(filePattern).Select(f => new FileNode(f, fileSet));
+            var expected = TargetDirectory.GetFiles(filePattern).Select(f => new FileNode(f, fileSet, BrowserResources.Properties.Resources.Image_File));
             CollectionAssert.AreEquivalent(expected, fileSet);
         }
 
