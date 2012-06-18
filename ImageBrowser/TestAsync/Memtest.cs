@@ -75,7 +75,7 @@ namespace TestAsync
                 var listView = new ListView();
                 InitializeListView(listView);
                 _listViews.Add(listView);
-                fileSet.BeginLoadingImages(listView);
+                fileSet.BeginLoadingImages();
             }
 
             sw.Stop();

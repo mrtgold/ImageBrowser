@@ -5,7 +5,7 @@ namespace TestAsync
 {
     public interface IListViewFileSet : IFileSet
     {
-        void BeginLoadingImages(ListView targetListView);
+        void BeginLoadingImages();
         ImageList ImageList { get; }
         ListView ListView { get; set; }
     }

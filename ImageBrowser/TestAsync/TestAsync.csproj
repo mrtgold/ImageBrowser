@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IListViewFileSet.cs" />
-    <Compile Include="ListViewFileSet.cs" />
     <Compile Include="ListViewFileSetBase.cs" />
     <Compile Include="ListViewFileSet_BlockingLoadAllDefaultImages.cs" />
     <Compile Include="ListViewFileSet_BlockingLoadAllImages.cs" />

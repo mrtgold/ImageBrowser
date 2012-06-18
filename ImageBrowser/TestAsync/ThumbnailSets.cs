@@ -8,13 +8,13 @@ namespace TestAsync
 {
     public class ThumbnailSets : Dictionary<DirectoryInfo, IListViewFileSet>
     {
-        public Control Container { get; private set; }
+        private readonly Control _container;
         private readonly Action<ListView> _initializeListView;
         private readonly string[] _filePatterns;
 
         public ThumbnailSets(Control container, Action<ListView> initializeListView, string[] filePatterns)
         {
-            Container = container;
+            _container = container;
             _initializeListView = initializeListView;
             _filePatterns = filePatterns;
         }
@@ -24,10 +24,10 @@ namespace TestAsync
             IListViewFileSet listViewFileSet;
             if (!ContainsKey(dir))
             {
-                listViewFileSet = new ListViewFileSet_BlockingLoadFilesAsyncLoadImages(dir, _filePatterns) { ListView = new ListView() };
+                listViewFileSet = new ListViewFileSet_BlockingLoadFilesAsyncLoadImages(dir, _filePatterns);
                 _initializeListView(listViewFileSet.ListView);
                 this[dir] = listViewFileSet;
-                listViewFileSet.BeginLoadingImages(listViewFileSet.ListView);
+                listViewFileSet.BeginLoadingImages();
             }
             else
                 listViewFileSet = this[dir];
@@ -42,16 +42,16 @@ namespace TestAsync
 
             if (!ReferenceEquals(previousListView, listViewFileSet.ListView))
             {
-                Container.SuspendLayout();
+                _container.SuspendLayout();
                 Trace.WriteLine(string.Format("after SuspendLayout: {0} msec", sw.ElapsedMilliseconds));
 
-                Container.Controls.Add(listViewFileSet.ListView);
+                _container.Controls.Add(listViewFileSet.ListView);
                 Trace.WriteLine(string.Format("after add: {0} msec", sw.ElapsedMilliseconds));
 
-                Container.Controls.Remove(previousListView);
+                _container.Controls.Remove(previousListView);
                 Trace.WriteLine(string.Format("after remove: {0} msec", sw.ElapsedMilliseconds));
 
-                Container.ResumeLayout(true);
+                _container.ResumeLayout(true);
                 Trace.WriteLine(string.Format("after ResumeLayout: {0} msec", sw.ElapsedMilliseconds));
                 previousListView = listViewFileSet.ListView;
             }

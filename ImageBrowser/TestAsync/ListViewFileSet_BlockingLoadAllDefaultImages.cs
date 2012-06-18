@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.IO;
-using System.Windows.Forms;
 
 namespace TestAsync
 {
@@ -12,20 +11,19 @@ namespace TestAsync
         {
         }
 
-        public override void BeginLoadingImages(ListView targetListView)
+        public override void BeginLoadingImages()
         {
-            BlockingLoadAllDefaultImages(targetListView);
+            BlockingLoadAllDefaultImages();
         }
 
-        private void BlockingLoadAllDefaultImages(ListView targetListView)
+        private void BlockingLoadAllDefaultImages()
         {
             var sw = Stopwatch.StartNew();
-            targetListView.LargeImageList = ImageList;
 
             foreach (var node in this)
             {
                 var key = node.File.FullName;
-                var item = targetListView.Items.Add(key, node.File.Name, DefaultImageKey);
+                var item = ListView.Items.Add(key, node.File.Name, DefaultImageKey);
                 //Trace.WriteLine(string.Format("BlockingLoadAllDefaultImages:{0}: {1} remaining", Dir, FilesNotDone.Count()));
             }
             sw.Stop();

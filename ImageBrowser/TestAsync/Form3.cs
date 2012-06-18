@@ -90,7 +90,7 @@ namespace TestAsync
                 listView = new ListView();
                 InitializeListView(listView);
                 _listViews[dir] = listView;
-                listViewFileSet.BeginLoadingImages(listView);
+                listViewFileSet.BeginLoadingImages();
             }
             else
                 listView = _listViews[dir];

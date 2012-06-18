@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Windows.Forms;
 using ImageBrowserLogic;
 
 namespace TestAsync
@@ -13,53 +12,51 @@ namespace TestAsync
         {
         }
 
-        public override void BeginLoadingImages(ListView targetListView)
+        public override void BeginLoadingImages()
         {
-            targetListView.LargeImageList = ImageList;
-            BlockingLoadFilesOnly(targetListView);
-            AsyncAddRealImages(targetListView);
+            BlockingLoadFilesOnly();
+            AsyncAddRealImages();
         }
 
-        private void BlockingLoadFilesOnly(ListView targetListView)
+        private void BlockingLoadFilesOnly()
         {
             var sw = Stopwatch.StartNew();
 
             foreach (var node in this)
             {
-                targetListView.Items.Add(node.Key, node.File.Name, DefaultImageKey);
+                ListView.Items.Add(node.Key, node.File.Name, DefaultImageKey);
             }
             sw.Stop();
             Trace.WriteLine(string.Format("BlockingLoadFilesOnly: loaded {0} default in {1} msec", Count, sw.ElapsedMilliseconds));
         }
 
-        private void AsyncAddRealImages(ListView targetListView)
+        private void AsyncAddRealImages()
         {
             var sw = Stopwatch.StartNew();
 
             foreach (var node in this)
             {
                 node.ImageGetter = new FullSizeImageGetter();
-                node.ImageGetter.BeginGetImage(ar => ProcessResult(ar, targetListView, this, node), node.File.FullName);
+                node.ImageGetter.BeginGetImage(ar => ProcessResult(ar, this, node), node.File.FullName);
             }
             sw.Stop();
             Trace.WriteLine(string.Format("AsyncAddRealImages: loaded {0} default in {1} msec", Count, sw.ElapsedMilliseconds));
         }
 
-        delegate void ProcessResultCallback(IAsyncResult result, ListView targetListView, IListViewFileSet fileSet, FileNode node);
-        private static void ProcessResult(IAsyncResult result, ListView targetListView, IListViewFileSet fileSet, FileNode node)
+        delegate void ProcessResultCallback(IAsyncResult result,  IListViewFileSet fileSet, FileNode node);
+        private static void ProcessResult(IAsyncResult result, IListViewFileSet fileSet, FileNode node)
         {
-            if (targetListView.InvokeRequired)
+            if (fileSet.ListView.InvokeRequired)
             {
                 var d = new ProcessResultCallback(ProcessResult);
-                targetListView.Invoke(d, new object[] { result, targetListView, fileSet, node });
+                fileSet.ListView.Invoke(d, new object[] { result, fileSet, node });
             }
             else
             {
                 var image = node.ImageGetter.EndGetImage(result);
                 fileSet.ImageList.Images.Add(node.Key, image);
 
-                //if (targetListView.Items.ContainsKey(key))
-                targetListView.Items[node.Key].ImageKey = node.Key;
+                fileSet.ListView.Items[node.Key].ImageKey = node.Key;
                 Trace.WriteLine("Updated image file {0}", node.Key);
             }
         }

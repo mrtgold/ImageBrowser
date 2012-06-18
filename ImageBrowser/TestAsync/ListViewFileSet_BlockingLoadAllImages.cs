@@ -13,17 +13,16 @@ namespace TestAsync
         {
         }
 
-        public override void BeginLoadingImages(ListView targetListView)
+        public override void BeginLoadingImages()
         {
-            BlockingLoadAllImages(targetListView);
+            BlockingLoadAllImages();
         }
 
-        private void BlockingLoadAllImages(ListView targetListView)
+        private void BlockingLoadAllImages()
         {
-            targetListView.LargeImageList = ImageList;
             foreach (var node in this)
             {
-                LoadImage(node, targetListView);
+                LoadImage(node, ListView);
                 Trace.WriteLine(string.Format("BlockingLoadAllImages:{0}: {1} remaining", Dir, FilesNotDone.Count()));
             }
         }

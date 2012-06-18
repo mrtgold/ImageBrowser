@@ -8,13 +8,13 @@ namespace TestAsync
     public abstract class ListViewFileSetBase : FileSet, IListViewFileSet
     {
         protected const string DefaultImageKey = "default";
-        public ImageList ImageList { get; private set; }
+        public ImageList ImageList { get { return ListView.LargeImageList; } }
         public ListView ListView { get; set; }
 
         protected ListViewFileSetBase(DirectoryInfo dir, params string[] filePatterns)
             : base(dir, filePatterns)
         {
-            ImageList = GetNewImageList();
+            ListView = new ListView {LargeImageList = GetNewImageList()};
         }
 
         private static ImageList GetNewImageList()
@@ -24,6 +24,6 @@ namespace TestAsync
             return imageList;
         }
 
-        public abstract void BeginLoadingImages(ListView targetListView);
+        public abstract void BeginLoadingImages();
     }
 }
