@@ -1,0 +1,64 @@
+Project: BrowserResources
+Configuration: Debug
+Scope: Project
+Assembly: C:\Users\Tim\Documents\GitHub\ImageBrowser\ImageBrowser\BrowserResources\bin\Debug\BrowserResources.dll
+Maintainability Index: 80
+Cyclomatic Complexity: 1
+Depth of Inheritance: 1
+Class Coupling: 4
+Lines of Code: 11
+
+
+Project: ImageBrowser
+Configuration: Debug
+Scope: Project
+Assembly: C:\Users\Tim\Documents\GitHub\ImageBrowser\ImageBrowser\ImageBrowser\bin\Debug\ImageBrowser.exe
+Maintainability Index: 83
+Cyclomatic Complexity: 28
+Depth of Inheritance: 7
+Class Coupling: 33
+Lines of Code: 106
+
+
+Project: ImageBrowserLogic
+Configuration: Debug
+Scope: Project
+Assembly: C:\Users\Tim\Documents\GitHub\ImageBrowser\ImageBrowser\ImageBrowserLogic\bin\Debug\ImageBrowserLogic.dll
+Maintainability Index: 86
+Cyclomatic Complexity: 137
+Depth of Inheritance: 7
+Class Coupling: 53
+Lines of Code: 221
+
+
+Project: ImageBrowserLogicTests
+Configuration: Debug
+Scope: Project
+Assembly: C:\Users\Tim\Documents\GitHub\ImageBrowser\ImageBrowser\ImageBrowserLogicTests\bin\Debug\ImageBrowserLogicTests.dll
+Maintainability Index: 78
+Cyclomatic Complexity: 61
+Depth of Inheritance: 2
+Class Coupling: 56
+Lines of Code: 173
+
+
+Project: ImageBrowserPresenter
+Configuration: Debug
+Scope: Project
+Assembly: C:\Users\Tim\Documents\GitHub\ImageBrowser\ImageBrowser\ImageBrowserPresenter\bin\Debug\ImageBrowserPresenter.dll
+Maintainability Index: 95
+Cyclomatic Complexity: 17
+Depth of Inheritance: 1
+Class Coupling: 8
+Lines of Code: 11
+
+
+Project: ImageBrowserPresenterTests
+Configuration: Debug
+Scope: Project
+Assembly: C:\Users\Tim\Documents\GitHub\ImageBrowser\ImageBrowser\ImageBrowserPresenterTests\bin\Debug\ImageBrowserPresenterTests.dll
+Maintainability Index: 83
+Cyclomatic Complexity: 28
+Depth of Inheritance: 1
+Class Coupling: 15
+Lines of Code: 58

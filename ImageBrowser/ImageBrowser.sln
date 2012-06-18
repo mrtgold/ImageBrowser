@@ -17,12 +17,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAsync", "TestAsync\Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserResources", "BrowserResources\BrowserResources.csproj", "{5D2B5C2E-108D-4B6D-9962-C308FA775A7A}"
 EndProject
+Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "ModelingProject1", "ModelingProject1\ModelingProject1.modelproj", "{16D8E279-D476-4008-A7BC-CC6031A339DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16D8E279-D476-4008-A7BC-CC6031A339DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16D8E279-D476-4008-A7BC-CC6031A339DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16D8E279-D476-4008-A7BC-CC6031A339DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16D8E279-D476-4008-A7BC-CC6031A339DB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{516BCAB1-C80A-48CC-AE7C-8D4229FC9309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{516BCAB1-C80A-48CC-AE7C-8D4229FC9309}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{516BCAB1-C80A-48CC-AE7C-8D4229FC9309}.Release|Any CPU.ActiveCfg = Release|Any CPU

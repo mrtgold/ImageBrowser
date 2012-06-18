@@ -17,7 +17,7 @@ namespace ImageBrowserLogic
 
         public DirectoryInfo RootDir { get; private set; }
         private DirectoryNode ParentNode { get; set; }
-        private bool HasError;
+        private bool _hasError;
         private DirectoryBrowserImageList.TreeViewImages _expandedImageKey;
         private DirectoryBrowserImageList.TreeViewImages _collapsedImageKey;
         public IEnumerable<DirectoryNode> SubDirs { get { return Nodes.OfType<DirectoryNode>().ToList(); } }
@@ -74,7 +74,7 @@ namespace ImageBrowserLogic
             }
             catch
             {
-                HasError = true;
+                _hasError = true;
                 SetImages();
                 UpdateImage();
             }
@@ -107,7 +107,7 @@ namespace ImageBrowserLogic
 
         private void SetImages()
         {
-            if (HasError)
+            if (_hasError)
                 _expandedImageKey = _collapsedImageKey = DirectoryBrowserImageList.TreeViewImages.Warning;
             else if (NodeType == TreeViewNodeType.Computer)
                 _expandedImageKey = _collapsedImageKey = DirectoryBrowserImageList.TreeViewImages.Computer;
