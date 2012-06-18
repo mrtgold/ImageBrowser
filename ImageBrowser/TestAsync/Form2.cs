@@ -10,12 +10,9 @@ namespace TestAsync
     public partial class Form2 : Form
     {
         private readonly ThumbnailSets _thumbnailSets;
-        private readonly Dictionary<DirectoryInfo, ListView> _listViews;
-        private readonly string[] _filePatterns = new[] { "*.jpg", "*.bmp", "*.png" };
-        private static Point _listViewLocation;
-        private static Size _listViewSize;
-        private static bool _listViewUseCompatibleStateImageBehavior;
-        private static Control _listViewParent;
+        private  Point _listViewLocation;
+        private  Size _listViewSize;
+        private  Control _listViewParent;
         private readonly Process _proc;
 
 
@@ -23,8 +20,7 @@ namespace TestAsync
         {
             InitializeComponent();
             CaptureListViewParams(listView1);
-            _thumbnailSets = new ThumbnailSets();
-            _listViews = new Dictionary<DirectoryInfo, ListView>();
+            _thumbnailSets = new ThumbnailSets(new[] { "*.jpg", "*.bmp", "*.png" });
             _proc = Process.GetCurrentProcess();
         }
 
@@ -47,15 +43,14 @@ namespace TestAsync
             return memoryUsed;
         }
 
-        private static void CaptureListViewParams(ListView listView)
+        private  void CaptureListViewParams(ListView listView)
         {
             _listViewParent = listView.Parent;
             _listViewLocation = listView.Location;
             _listViewSize = listView.Size;
-            _listViewUseCompatibleStateImageBehavior = listView.UseCompatibleStateImageBehavior;
         }
 
-        private static void InitializeListView(ListView listView)
+        private  void InitializeListView(ListView listView)
         {
             listView.View = View.LargeIcon;
             listView.LabelEdit = false;
@@ -64,7 +59,7 @@ namespace TestAsync
             listView.Dock = DockStyle.Fill;
             listView.Location = _listViewLocation;
             listView.Size = _listViewSize;
-            listView.UseCompatibleStateImageBehavior = _listViewUseCompatibleStateImageBehavior;
+            listView.UseCompatibleStateImageBehavior = false;
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -84,7 +79,8 @@ namespace TestAsync
         {
             var sw = Stopwatch.StartNew();
 
-            var listViewFileSet = GetListViewFileSet(dir, _thumbnailSets, _filePatterns);
+            //var listViewFileSet = GetListViewFileSet(dir, _thumbnailSets, _filePatterns);
+            var listViewFileSet = _thumbnailSets.GetListViewFileSet(dir, InitializeListView);
 
             DisplayList(listViewFileSet.ListView, sw, _listViewParent, ref listView1);
 
@@ -110,24 +106,6 @@ namespace TestAsync
             Trace.WriteLine(string.Format("after ResumeLayout: {0} msec", sw.ElapsedMilliseconds));
             previousListView = newListView;
         }
-
-        private static IListViewFileSet GetListViewFileSet(DirectoryInfo dir, Dictionary<DirectoryInfo, IListViewFileSet> fileSets, string[] filePatterns)
-        {
-            IListViewFileSet listViewFileSet;
-            if (!fileSets.ContainsKey(dir))
-            {
-                listViewFileSet = new ListViewFileSet_BlockingLoadFilesAsyncLoadImages(dir, filePatterns)
-                                      {ListView = new ListView()};
-                InitializeListView(listViewFileSet.ListView);
-                fileSets[dir] = listViewFileSet;
-                listViewFileSet.BeginLoadingImages(listViewFileSet.ListView);
-            }
-            else
-                listViewFileSet = fileSets[dir];
-
-            return listViewFileSet;
-        }
-
 
     }
 }
