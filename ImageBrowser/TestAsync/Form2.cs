@@ -85,9 +85,8 @@ namespace TestAsync
             var sw = Stopwatch.StartNew();
 
             var listViewFileSet = GetListViewFileSet(dir, _thumbnailSets, _filePatterns);
-            var listView = GetListView(dir, listViewFileSet, _listViews);
 
-            DisplayList(listView, sw, _listViewParent, ref listView1);
+            DisplayList(listViewFileSet.ListView, sw, _listViewParent, ref listView1);
 
             sw.Stop();
 
@@ -112,31 +111,20 @@ namespace TestAsync
             previousListView = newListView;
         }
 
-        private static ListView GetListView(DirectoryInfo dir, IListViewFileSet listViewFileSet, Dictionary<DirectoryInfo, ListView> listViews)
-        {
-            ListView listView;
-            if (!listViews.ContainsKey(dir))
-            {
-                listView = new ListView();
-                InitializeListView(listView);
-                listViews[dir] = listView;
-                listViewFileSet.BeginLoadingImages(listView);
-            }
-            else
-                listView = listViews[dir];
-            return listView;
-        }
-
         private static IListViewFileSet GetListViewFileSet(DirectoryInfo dir, Dictionary<DirectoryInfo, IListViewFileSet> fileSets, string[] filePatterns)
         {
             IListViewFileSet listViewFileSet;
             if (!fileSets.ContainsKey(dir))
             {
-                listViewFileSet = new ListViewFileSet_BlockingLoadFilesAsyncLoadImages(dir, filePatterns);
+                listViewFileSet = new ListViewFileSet_BlockingLoadFilesAsyncLoadImages(dir, filePatterns)
+                                      {ListView = new ListView()};
+                InitializeListView(listViewFileSet.ListView);
                 fileSets[dir] = listViewFileSet;
+                listViewFileSet.BeginLoadingImages(listViewFileSet.ListView);
             }
             else
                 listViewFileSet = fileSets[dir];
+
             return listViewFileSet;
         }
 

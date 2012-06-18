@@ -7,5 +7,6 @@ namespace TestAsync
     {
         void BeginLoadingImages(ListView targetListView);
         ImageList ImageList { get; }
+        ListView ListView { get; set; }
     }
 }

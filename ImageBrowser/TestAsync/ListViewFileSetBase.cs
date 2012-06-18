@@ -9,6 +9,7 @@ namespace TestAsync
     {
         protected const string DefaultImageKey = "default";
         public ImageList ImageList { get; private set; }
+        public ListView ListView { get; set; }
 
         protected ListViewFileSetBase(DirectoryInfo dir, params string[] filePatterns)
             : base(dir, filePatterns)
