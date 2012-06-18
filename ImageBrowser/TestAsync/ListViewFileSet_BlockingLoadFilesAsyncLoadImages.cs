@@ -36,7 +36,8 @@ namespace TestAsync
 
             foreach (var node in this)
             {
-                node.ImageGetter = new FullSizeImageGetter();
+                node.ImageGetter = new SimpleBitmapThumbnailGetter(100);
+                //node.ImageGetter = new FullSizeImageGetter();
                 node.ImageGetter.BeginGetImage(ar => ProcessResult(ar, this, node), node.File.FullName);
             }
             sw.Stop();
@@ -57,7 +58,7 @@ namespace TestAsync
                 fileSet.ImageList.Images.Add(node.Key, image);
 
                 fileSet.ListView.Items[node.Key].ImageKey = node.Key;
-                Trace.WriteLine("Updated image file {0}", node.Key);
+                Trace.WriteLine(string.Format( "Updated image file {0}", node.Key));
             }
         }
 

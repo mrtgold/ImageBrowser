@@ -12,13 +12,19 @@ namespace TestAsync
         private readonly Point _listViewLocation;
         private readonly Size _listViewSize;
 
-
         public Form2()
         {
             InitializeComponent();
             _listViewLocation = listView1.Location;
             _listViewSize = listView1.Size;
             _thumbnailSets = new ThumbnailSets(listView1.Parent, InitializeListView, new[] { "*.jpg", "*.bmp", "*.png" });
+        }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            directoryTree1.InitDrives();
+            directoryTree1.DirectorySelected += DirectorySelected;
+            UpdateStatusBar();
         }
 
         private  void InitializeListView(ListView listView)
@@ -33,19 +39,13 @@ namespace TestAsync
             listView.Size = _listViewSize;
         }
 
-        private void Form2_Load(object sender, EventArgs e)
-        {
-            directoryTree1.InitDrives();
-            directoryTree1.DirectorySelected += DirectorySelected;
-            UpdateStatusBar();
-        }
-
         private void DirectorySelected(DirectoryInfo dir)
         {
             UpdateStatusBar(dir.FullName);
             _thumbnailSets.DisplayList(dir, ref listView1);
         }
 
+        #region StatusBar updates
         private void UpdateStatusBar(string dir = null)
         {
             if (dir != null)
@@ -70,6 +70,7 @@ namespace TestAsync
             return memoryUsed;
         }
 
+        #endregion
 
     }
 }

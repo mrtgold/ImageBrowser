@@ -21,18 +21,17 @@ namespace TestAsync
 
         private IListViewFileSet GetListViewFileSet(DirectoryInfo dir)
         {
-            IListViewFileSet listViewFileSet;
             if (!ContainsKey(dir))
             {
-                listViewFileSet = new ListViewFileSet_BlockingLoadFilesAsyncLoadImages(dir, _filePatterns);
-                _initializeListView(listViewFileSet.ListView);
+                var listViewFileSet = new ListViewFileSet_BlockingLoadFilesAsyncLoadImages(dir, _filePatterns);
                 this[dir] = listViewFileSet;
+                _initializeListView(listViewFileSet.ListView);
                 listViewFileSet.BeginLoadingImages();
-            }
-            else
-                listViewFileSet = this[dir];
 
-            return listViewFileSet;
+                return listViewFileSet;
+            }
+
+            return this[dir];
         }
 
         public void DisplayList(DirectoryInfo dir, ref ListView previousListView)

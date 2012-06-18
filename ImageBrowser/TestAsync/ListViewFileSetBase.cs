@@ -19,7 +19,7 @@ namespace TestAsync
 
         private static ImageList GetNewImageList()
         {
-            var imageList = new ImageList { ImageSize = new Size(100, 100) };
+            var imageList = new ImageList { ImageSize = new Size(100, 100), ColorDepth = ColorDepth.Depth16Bit};
             imageList.Images.Add(DefaultImageKey, BrowserResources.Properties.Resources.Image_File);
             return imageList;
         }

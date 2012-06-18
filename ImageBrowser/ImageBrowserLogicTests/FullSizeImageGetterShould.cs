@@ -16,7 +16,7 @@ namespace ImageBrowserLogicTests
     {
         private const string FileName = "silver-laptop-icon.jpg";
         private FileInfo _file;
-        private Bitmap _originalImage;
+        private Image _originalImage;
 
         [SetUp]
         public void Setup()
