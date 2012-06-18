@@ -20,7 +20,7 @@ namespace TestAsync
         {
             InitializeComponent();
             CaptureListViewParams(listView1);
-            _thumbnailSets = new ThumbnailSets(new[] { "*.jpg", "*.bmp", "*.png" });
+            _thumbnailSets = new ThumbnailSets(_listViewParent, InitializeListView, new[] { "*.jpg", "*.bmp", "*.png" });
             _proc = Process.GetCurrentProcess();
         }
 
@@ -57,9 +57,9 @@ namespace TestAsync
             listView.LabelWrap = true;
             listView.Scrollable = true;
             listView.Dock = DockStyle.Fill;
+            listView.UseCompatibleStateImageBehavior = false;
             listView.Location = _listViewLocation;
             listView.Size = _listViewSize;
-            listView.UseCompatibleStateImageBehavior = false;
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -72,39 +72,7 @@ namespace TestAsync
         private void DirectorySelected(DirectoryInfo dir)
         {
             UpdateStatusBar(dir.FullName);
-            DisplayList(dir);
-        }
-
-        private void DisplayList(DirectoryInfo dir)
-        {
-            var sw = Stopwatch.StartNew();
-
-            //var listViewFileSet = GetListViewFileSet(dir, _thumbnailSets, _filePatterns);
-            var listViewFileSet = _thumbnailSets.GetListViewFileSet(dir, InitializeListView);
-
-            DisplayList(listViewFileSet.ListView, sw, _listViewParent, ref listView1);
-
-            sw.Stop();
-
-            Trace.WriteLine(string.Format("loaded dir {0} in {1} msec", dir.FullName, sw.ElapsedMilliseconds));
-        }
-
-        private static void DisplayList(ListView newListView, Stopwatch sw, Control listViewParent, ref ListView previousListView)
-        {
-            if (ReferenceEquals(previousListView, newListView)) return;
-
-            listViewParent.SuspendLayout();
-            Trace.WriteLine(string.Format("after SuspendLayout: {0} msec", sw.ElapsedMilliseconds));
-
-            listViewParent.Controls.Add(newListView);
-            Trace.WriteLine(string.Format("after add: {0} msec", sw.ElapsedMilliseconds));
-
-            listViewParent.Controls.Remove(previousListView);
-            Trace.WriteLine(string.Format("after remove: {0} msec", sw.ElapsedMilliseconds));
-
-            listViewParent.ResumeLayout(true);
-            Trace.WriteLine(string.Format("after ResumeLayout: {0} msec", sw.ElapsedMilliseconds));
-            previousListView = newListView;
+            _thumbnailSets.DisplayList(dir, ref listView1);
         }
 
     }
