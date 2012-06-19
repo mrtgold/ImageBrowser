@@ -32,7 +32,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.directoryTree1 = new ImageBrowserLogic.DirectoryTree();
+            this.directoryTree1 = new DirectoryBrowser.DirectoryTree();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -108,7 +108,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.ListBox listBox1;
-        private ImageBrowserLogic.DirectoryTree directoryTree1;
+        private DirectoryBrowser.DirectoryTree directoryTree1;
     }
 }
 

@@ -1,7 +1,7 @@
 using System.IO;
 using NUnit.Framework;
 
-namespace ImageBrowserLogicTests
+namespace DirectoryBrowserTests
 {
     public class DirectoryTester
     {

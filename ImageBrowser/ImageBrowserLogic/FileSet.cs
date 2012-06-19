@@ -2,18 +2,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using ImageBrowserLogic.ImageProviders;
 
 namespace ImageBrowserLogic
 {
-    public interface IFileSet : IList<FileNode>
-    {
-    }
-
     public class FileSet : List<FileNode>, IFileSet
     {
         public DirectoryInfo Dir { get; set; }
 
-        public FileSet(DirectoryInfo dir, params string[] filePatterns)
+        public FileSet(DirectoryInfo dir, IImageProviderFactory imageProviderFactory, params string[] filePatterns)
         {
             Dir = dir;
             var fileInfos = new List<FileInfo>();
@@ -28,7 +25,7 @@ namespace ImageBrowserLogic
                         fileInfos.AddRange(Dir.GetFiles(filePattern));
                 }
 
-                foreach (var fileNode in fileInfos.Select(file => new FileNode(file, this, BrowserResources.Properties.Resources.Image_File)))
+                foreach (var fileNode in fileInfos.Select(file => new FileNode(file, this, BrowserResources.Properties.Resources.Image_File,imageProviderFactory)))
                 {
                     Add(fileNode);
                 }

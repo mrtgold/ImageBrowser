@@ -5,6 +5,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using ImageBrowserLogic;
+using ImageBrowserLogic.LoadingStrategies;
 
 namespace TestAsync
 {
@@ -70,7 +72,7 @@ namespace TestAsync
 
             for (var i = 0; i < numDirs; i++)
             {
-                var fileSet = new ListViewFileSet_BlockingLoadAllImages(dir, _filePatterns);
+                var fileSet = new ListViewFileSet_BlockingLoadAllImages(dir,null,null, _filePatterns);
                 _memoryTest.Add(fileSet);
                 var listView = new ListView();
                 InitializeListView(listView);

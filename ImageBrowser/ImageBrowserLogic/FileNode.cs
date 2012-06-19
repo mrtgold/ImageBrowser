@@ -1,22 +1,31 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
+using ImageBrowserLogic.ImageProviders;
 
 namespace ImageBrowserLogic
 {
     public class FileNode
     {
+        private readonly IImageProviderFactory _factory;
         public FileInfo File { get; set; }
         public FileSet ParentNode { get; set; }
         public Image Image { get; set; }
 
         public bool Done { get; set; }
         public string Key { get { return File.FullName; } }
-        public IImageProvider ImageGetter { get; set; }
 
-        public FileNode(FileInfo file, FileSet parent, Image defaultImage)
+        private IImageProvider _imageGetter;
+        public IImageProvider ImageGetter
         {
+            get { return _imageGetter ?? (_imageGetter = _factory.Build()); }
+            set { _imageGetter = value; }
+        }
+
+        public FileNode(FileInfo file, FileSet parent, Image defaultImage, IImageProviderFactory factory)
+        {
+            _factory = factory;
             Done = false;
             File = file;
             ParentNode = parent;
@@ -33,22 +42,29 @@ namespace ImageBrowserLogic
 
         }
 
-        public void LoadImage()
+        public void BeginLoadImage()
         {
-            var getter = new FullSizeImageGetter();
-
-            var result = getter.BeginGetImage(EndGetImage, File.FullName);
-
-            result.AsyncWaitHandle.WaitOne();
+            ImageGetter.BeginGetImage(ar => EndLoadImage(ar, this), File.FullName);
         }
 
-        protected virtual void EndGetImage(IAsyncResult ar)
-        {
-            Console.WriteLine("Read Completed");
 
-            var getter1 = (FullSizeImageGetter)ar.AsyncState;
-            Image = getter1.EndGetImage(ar);
-            Done = true;
+        delegate void EndLoadImageCallback(IAsyncResult result, FileNode node);
+        private static void EndLoadImage(IAsyncResult result, FileNode node)
+        {
+            var fileSet = ((IListViewFileSet) node.ParentNode);
+            if (fileSet.ListView.InvokeRequired)
+            {
+                var d = new EndLoadImageCallback(EndLoadImage);
+                fileSet.ListView.Invoke(d, new object[] { result, node });
+            }
+            else
+            {
+                node.Image = node.ImageGetter.EndGetImage(result);
+                fileSet.ImageList.Images.Add(node.Key, node.Image);
+
+                fileSet.ListView.Items[node.Key].ImageKey = node.Key;
+                Trace.WriteLine(string.Format("Updated image file {0}", node.Key));
+            }
         }
 
         #region Equality members

@@ -44,21 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Class2.cs" />
-    <Compile Include="DirectoryNodeShould.cs" />
     <Compile Include="DirectoryTester.cs" />
-    <Compile Include="DirectoryTreeShould.cs" />
     <Compile Include="FileSetShould.cs" />
-    <Compile Include="FullSizeImageGetterShould.cs" />
+    <Compile Include="ImageProviders\FullSizeImageGetterShould.cs" />
+    <Compile Include="ImageProviders\MockImageProvider.cs" />
+    <Compile Include="ImageProviders\MockImageProviderFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SimpleBitmapThumbnailGetterShould.cs" />
-    <Compile Include="ThumbnailControlShould.cs" />
+    <Compile Include="ImageProviders\SimpleBitmapThumbnailGetterShould.cs" />
     <Compile Include="ThumbnailsShould.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +100,9 @@
       <Project>{E6813F44-EA14-40AE-B974-52E15478015E}</Project>
       <Name>ImageBrowserPresenter</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="LoadingStrategies\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

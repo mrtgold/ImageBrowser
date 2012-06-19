@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C7F42E05-9454-4AE0-BEC3-39A092725805}</ProjectGuid>
+    <ProjectGuid>{EB8DF6BA-936F-426F-B935-DA39428F335D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ImageBrowserLogic</RootNamespace>
-    <AssemblyName>ImageBrowserLogic</AssemblyName>
+    <RootNamespace>DirectoryBrowser</RootNamespace>
+    <AssemblyName>DirectoryBrowser</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,49 +30,73 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>cab.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Forms.DataVisualization" />
-    <Reference Include="System.Windows.Input.Manipulations" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileNode.cs" />
-    <Compile Include="FileSet.cs" />
-    <Compile Include="IFileSet.cs" />
-    <Compile Include="ImageProviders\FullSizeImageGetter.cs" />
-    <Compile Include="ImageProviders\IImageProvider.cs" />
-    <Compile Include="ImageProviders\IImageProviderFactory.cs" />
-    <Compile Include="IListViewFileSet.cs" />
-    <Compile Include="IListViewFileSetFactory.cs" />
-    <Compile Include="ImageProviders\ImageGetterBase.cs" />
-    <Compile Include="ImageProviders\SimpleBitmapThumbnailGetterFactory.cs" />
-    <Compile Include="LoadingStrategies\BlockingLoadFilesAsyncListViewFileSetFactory.cs" />
-    <Compile Include="LoadingStrategies\ListViewFileSetBase.cs" />
-    <Compile Include="LoadingStrategies\ListViewFileSet_BlockingLoadAllDefaultImages.cs" />
-    <Compile Include="LoadingStrategies\ListViewFileSet_BlockingLoadAllImages.cs" />
-    <Compile Include="LoadingStrategies\ListViewFileSet_BlockingLoadFilesAsyncLoadImages.cs" />
-    <Compile Include="LoadingStrategies\ListViewFileSet_LoadFilesBlockingLoadImages.cs" />
+    <Compile Include="DirectoryBrowserImageList.cs" />
+    <Compile Include="DirectoryNode.cs" />
+    <Compile Include="DirectoryTree.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ImageProviders\SimpleBitmapThumbnailGetter.cs" />
-    <Compile Include="Thumbnail.cs" />
-    <Compile Include="Thumbnails.cs" />
-    <Compile Include="ThumbnailSets.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BrowserResources\BrowserResources.csproj">
-      <Project>{5d2b5c2e-108d-4b6d-9962-c308fa775a7a}</Project>
+      <Project>{5D2B5C2E-108D-4B6D-9962-C308FA775A7A}</Project>
       <Name>BrowserResources</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Computer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Folder_48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Folder_Closed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FolderOpen_48x48_72.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hard_Drive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stuffed_Folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cab.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

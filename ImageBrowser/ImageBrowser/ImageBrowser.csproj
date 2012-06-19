@@ -44,6 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -52,6 +58,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -76,9 +85,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BrowserResources\BrowserResources.csproj">
-      <Project>{5d2b5c2e-108d-4b6d-9962-c308fa775a7a}</Project>
-      <Name>BrowserResources</Name>
+    <ProjectReference Include="..\DirectoryTree\DirectoryBrowser.csproj">
+      <Project>{eb8df6ba-936f-426f-b935-da39428f335d}</Project>
+      <Name>DirectoryBrowser</Name>
     </ProjectReference>
     <ProjectReference Include="..\ImageBrowserLogic\ImageBrowserLogic.csproj">
       <Project>{C7F42E05-9454-4AE0-BEC3-39A092725805}</Project>
