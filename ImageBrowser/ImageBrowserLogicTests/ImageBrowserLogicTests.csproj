@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DirectoryTester.cs" />
+    <Compile Include="FileNodeShould.cs" />
     <Compile Include="FileSetShould.cs" />
     <Compile Include="ImageProviders\FullSizeImageGetterShould.cs" />
     <Compile Include="ImageProviders\MockImageProvider.cs" />

@@ -5,7 +5,18 @@ using System.Windows.Forms;
 
 namespace DirectoryBrowser
 {
-    public class DirectoryTree : TreeView
+    public interface IDirectoryTree
+    {
+        void InitDrives();
+        void AfterExpanding(TreeViewEventArgs e);
+        void BeforeSelecting(TreeViewCancelEventArgs e);
+        void AfterSelecting(TreeViewEventArgs e);
+        void OnDirectorySelected(DirectoryInfo dir);
+        void BeforeExpanding(TreeViewCancelEventArgs e);
+        DirectoryTree.DirectorySelectedHandler DirectorySelected { get; set; }
+    }
+
+    public class DirectoryTree : TreeView, IDirectoryTree
     {
         public DirectoryTree()
         {
@@ -23,8 +34,9 @@ namespace DirectoryBrowser
         #region Events
         public delegate void DirectorySelectedHandler(DirectoryInfo dir);
 
-        public DirectorySelectedHandler DirectorySelected;
+        public DirectorySelectedHandler DirectorySelected { get; set; }
 
+        public void BeforeExpanding(TreeViewCancelEventArgs e) { OnBeforeExpand(e); }
         protected override void OnBeforeExpand(TreeViewCancelEventArgs e)
         {
             var node = GetDirectoryNode(e.Node);
@@ -35,12 +47,14 @@ namespace DirectoryBrowser
             UpdateImages(e.Node);
         }
 
+        public void AfterExpanding(TreeViewEventArgs e) { OnAfterExpand(e); }
         protected override void OnAfterExpand(TreeViewEventArgs e)
         {
             base.OnAfterExpand(e);
             UpdateImages(e.Node);
         }
 
+        public void BeforeSelecting(TreeViewCancelEventArgs e) { OnBeforeSelect(e); }
         protected override void OnBeforeSelect(TreeViewCancelEventArgs e)
         {
             if (!e.Node.IsExpanded)
@@ -50,6 +64,7 @@ namespace DirectoryBrowser
             UpdateImages(e.Node);
         }
 
+        public void AfterSelecting(TreeViewEventArgs e) { OnAfterSelect(e); }
         protected override void OnAfterSelect(TreeViewEventArgs e)
         {
             var node = GetDirectoryNode(e.Node);
@@ -59,12 +74,12 @@ namespace DirectoryBrowser
             UpdateImages(e.Node);
         }
 
-        private void OnDirectorySelected(DirectoryInfo dir)
+        public void OnDirectorySelected(DirectoryInfo dir)
         {
             if (DirectorySelected != null)
                 DirectorySelected(dir);
         }
-        
+
         #endregion
 
         #region Helpers

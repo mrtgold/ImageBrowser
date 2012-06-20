@@ -96,14 +96,25 @@ namespace ImageBrowserPresenter
 
         private string GetImagesLoaded()
         {
-            var imageCount = _thumbnailSets.Select(dir => dir.Value).Sum(node => node.ImageList.Images.Count - 1);
+            var imageCount = 0;
+            if (_thumbnailSets != null)
+            foreach (var thumbnailSet in _thumbnailSets)
+            {
+                try
+                {
+                    imageCount += thumbnailSet.Value.ImageList.Images.Count - 1;
+                }
+                catch{ }
+            }
 
-            var imagesLoaded = string.Format("  Images loaded: {0:N0}  ", imageCount);
-            return imagesLoaded;
+            //imageCount = _thumbnailSets.Select(dir => dir.Value).Sum(node => node.ImageList.Images.Count - 1);
+            var imagesLoadedMsg = string.Format("  Images loaded: {0:N0}  ", imageCount);
+            return imagesLoadedMsg;
         }
 
         private void UpdateImageListCount()
         {
+            if (_thumbnailSets == null) return;
             if (!_thumbnailSets.ContainsKey(_currentDir)) return;
             var listView = _thumbnailSets[_currentDir].ListView;
             if (listView == null) return;
@@ -115,7 +126,7 @@ namespace ImageBrowserPresenter
             var msg = string.Format("{0} of {1} images loaded", numLoaded, numFiles);
             _view.UpdateFilesStatus(msg);
         }
-        
+
         #endregion
     }
 }

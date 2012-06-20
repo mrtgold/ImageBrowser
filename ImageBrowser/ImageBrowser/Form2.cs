@@ -28,7 +28,7 @@ namespace ImageBrowser
         }
 
         public Control ListViewParentContainer { get { return _listViewParentContainer; } }
-        public DirectoryTree DirectoryTree { get { return directoryTree1; } }
+        public IDirectoryTree DirectoryTree { get { return directoryTree1; } }
 
         public void InitializeListView(ListView listView)
         {

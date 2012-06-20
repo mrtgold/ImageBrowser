@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using DirectoryBrowser;
 using NUnit.Framework;
@@ -30,31 +31,29 @@ namespace DirectoryBrowserTests
             CollectionAssert.AreEquivalent(expectedNodes, dirTree.Nodes);
         }
 
-        //[Test]
-        //public void EmitDirectorySelected()
-        //{
-        //    var dirTree = new DirectoryTree();
-        //    dirTree.DirectorySelected += LogDirectorySelected;// listOfSelectedDirs.Add;
+        [Test]
+        public void EmitDirectorySelected()
+        {
+            var dirTree = new DirectoryTree();
+            dirTree.DirectorySelected += LogDirectorySelected;// listOfSelectedDirs.Add;
 
-        //    dirTree.InitDrives();
-        //    CollectionAssert.IsEmpty(_listOfSelectedDirs);
+            dirTree.InitDrives();
+            CollectionAssert.IsEmpty(_listOfSelectedDirs);
 
-        //    Assert.IsNull(dirTree.SelectedNode);
+            Assert.IsNull(dirTree.SelectedNode);
 
-        //    var firstNode = dirTree.Nodes[0] as DirectoryNode;
-        //    Assert.IsNotNull(firstNode);
-        //    dirTree.SelectedNode = firstNode;
-        //    dirTree.ExpandAll();
+            var firstNode = dirTree.Nodes[0] as DirectoryNode;
+            Assert.IsNotNull(firstNode);
+            dirTree.OnDirectorySelected(firstNode.RootDir);
 
-        //    Assert.AreSame(firstNode,dirTree.SelectedNode);
-        //    Assert.AreEqual(firstNode.RootDir, _listOfSelectedDirs.Single());
-        //}
+            Assert.AreEqual(firstNode.RootDir, _listOfSelectedDirs.Single());
+        }
 
-        //private List<DirectoryInfo> _listOfSelectedDirs = new List<DirectoryInfo>();
+        private readonly List<DirectoryInfo> _listOfSelectedDirs = new List<DirectoryInfo>();
 
-        //private void LogDirectorySelected(DirectoryInfo dir)
-        //{
-        //    _listOfSelectedDirs.Add(dir);
-        //}
+        private void LogDirectorySelected(DirectoryInfo dir)
+        {
+            _listOfSelectedDirs.Add(dir);
+        }
     }
 }

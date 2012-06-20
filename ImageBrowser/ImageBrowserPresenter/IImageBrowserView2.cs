@@ -9,7 +9,7 @@ namespace ImageBrowserPresenter
         event ImageBrowserViewDirectorySelectedHandler DirectorySelected;
         event ImageBrowserViewEventDelegate2 BrowserViewLoad;
         Control ListViewParentContainer { get; }
-        DirectoryTree DirectoryTree { get; }
+        IDirectoryTree DirectoryTree { get; }
 
         void InitializeListView(ListView listView);
         void OnDirectorySelected(DirectoryInfo dir);

@@ -80,13 +80,25 @@ namespace TestAsync
                                  {
                                      Tag = new DirNode(dir.Name, dir)
                                                {
-                                                   ExpandedImageKey = DirectoryBrowserImageList.TreeViewImages.StuffedFolder.ToString(),
-                                                   CollapsedImageKey = DirectoryBrowserImageList.TreeViewImages.ClosedFolder.ToString()
+                                                   ExpandedImageKey = TreeViewImages.StuffedFolder.ToString(),
+                                                   CollapsedImageKey = TreeViewImages.ClosedFolder.ToString()
                                                }
                                  };
             ((DirNode)dirNode.Tag).SetCollapsedImage(dirNode);
 
             return dirNode;
+        }
+
+        public enum TreeViewImages
+        {
+            Computer = 1,
+            Drive,
+            OpenFolder,
+            ClosedFolder,
+            StuffedFolder,
+            Warning,
+            Error,
+            DefaultImageFile
         }
 
         private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
@@ -113,8 +125,8 @@ namespace TestAsync
 
                     child.Nodes.Add(new TreeNode()
                     {
-                        ImageKey = DirectoryBrowserImageList.TreeViewImages.ClosedFolder.ToString(),
-                        SelectedImageKey = DirectoryBrowserImageList.TreeViewImages.ClosedFolder.ToString()
+                        ImageKey = Form1.TreeViewImages.ClosedFolder.ToString(),
+                        SelectedImageKey = Form1.TreeViewImages.ClosedFolder.ToString()
                     }); // add dummy node to allow expansion
                     node.Nodes.Add(child);
                 }
@@ -127,8 +139,8 @@ namespace TestAsync
             catch
             { // try to handle use each exception separately
                 //  node.Tag = null; // clear tag
-                nodeInfo.CollapsedImageKey = DirectoryBrowserImageList.TreeViewImages.Warning.ToString();
-                nodeInfo.ExpandedImageKey = DirectoryBrowserImageList.TreeViewImages.Warning.ToString();
+                nodeInfo.CollapsedImageKey = Form1.TreeViewImages.Warning.ToString();
+                nodeInfo.ExpandedImageKey = Form1.TreeViewImages.Warning.ToString();
                 nodeInfo.SetCollapsedImage(node);
 
             }
@@ -157,7 +169,7 @@ namespace TestAsync
             }
             else
             {
-                listBox1.Items.Add(string.Format( "Files not loaded yet for {0}...", dir.FullName));
+                listBox1.Items.Add(String.Format( "Files not loaded yet for {0}...", dir.FullName));
             }
         }
 
