@@ -30,8 +30,6 @@ namespace ImageBrowserPresenter
             _view = view;
             view.DirectorySelected += view_DirectorySelected;
             view.BrowserViewLoad += view_BrowserViewLoad;
-
-
         }
 
         void view_BrowserViewLoad(object sender, IImageBrowserView2 view)
@@ -67,6 +65,7 @@ namespace ImageBrowserPresenter
             UpdateStatusBar(dir.FullName);
         }
 
+        #region Status bar updates
         private void UpdateStatusBar(string dir = null)
         {
             if (dir != null)
@@ -80,20 +79,6 @@ namespace ImageBrowserPresenter
         private void UpdateAppStatus()
         {
             _view.UpdateAppStatus(GetMemoryUsed() + GetImagesLoaded());
-        }
-
-        private void UpdateImageListCount()
-        {
-            if (!_thumbnailSets.ContainsKey(_currentDir)) return;
-            var listView = _thumbnailSets[_currentDir].ListView;
-            if (listView == null) return;
-
-            var imageList = listView.LargeImageList;
-            if (imageList == null) return;
-            var numLoaded = imageList.Images.Count - 1;
-            var numFiles = listView.Items.Count;
-            var msg = string.Format("{0} of {1} images loaded", numLoaded, numFiles);
-            _view.UpdateFilesStatus(msg);
         }
 
         private static string GetMemoryUsed()
@@ -111,11 +96,26 @@ namespace ImageBrowserPresenter
 
         private string GetImagesLoaded()
         {
-            var imageCount = _thumbnailSets.Select(dir => dir.Value).Sum(node => node.ImageList.Images.Count-1);
+            var imageCount = _thumbnailSets.Select(dir => dir.Value).Sum(node => node.ImageList.Images.Count - 1);
 
             var imagesLoaded = string.Format("  Images loaded: {0:N0}  ", imageCount);
             return imagesLoaded;
         }
 
+        private void UpdateImageListCount()
+        {
+            if (!_thumbnailSets.ContainsKey(_currentDir)) return;
+            var listView = _thumbnailSets[_currentDir].ListView;
+            if (listView == null) return;
+
+            var imageList = listView.LargeImageList;
+            if (imageList == null) return;
+            var numLoaded = imageList.Images.Count - 1;
+            var numFiles = listView.Items.Count;
+            var msg = string.Format("{0} of {1} images loaded", numLoaded, numFiles);
+            _view.UpdateFilesStatus(msg);
+        }
+        
+        #endregion
     }
 }
