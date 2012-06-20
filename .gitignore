@@ -13,4 +13,5 @@ _Resharper.*
 */*/*.ncrunchproject
 */*.ncrunchsolution
 */*.user
+*/*/*.user
 *.suo
