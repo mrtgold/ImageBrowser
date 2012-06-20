@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using ImageBrowser;
 
 namespace TestAsync
 {
@@ -15,9 +14,9 @@ namespace TestAsync
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
-            Application.Run(new Form2());
+            //Application.Run(new Form2());
             //Application.Run(new Form3());
-            //Application.Run(new Memtest());
+            Application.Run(new Memtest());
         }
     }
 }

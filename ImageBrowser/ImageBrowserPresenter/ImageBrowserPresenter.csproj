@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,12 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IImageBrowserView2.cs" />
     <Compile Include="IImageBrowserView.cs" />
     <Compile Include="ImageBrowserPresenter.cs" />
+    <Compile Include="ImageBrowserPresenter2.cs" />
     <Compile Include="IThumbnailDisplayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DirectoryTree\DirectoryBrowser.csproj">
+      <Project>{EB8DF6BA-936F-426F-B935-DA39428F335D}</Project>
+      <Name>DirectoryBrowser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImageBrowserLogic\ImageBrowserLogic.csproj">
       <Project>{C7F42E05-9454-4AE0-BEC3-39A092725805}</Project>
       <Name>ImageBrowserLogic</Name>

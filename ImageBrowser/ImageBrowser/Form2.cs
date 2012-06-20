@@ -1,38 +1,46 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using DirectoryBrowser;
 using ImageBrowserLogic;
 using ImageBrowserLogic.ImageProviders;
 using ImageBrowserLogic.LoadingStrategies;
+using ImageBrowserPresenter;
 
 namespace ImageBrowser
 {
-    public partial class Form2 : Form
+    public partial class Form2 : Form, IImageBrowserView2
     {
-        private readonly ThumbnailSets _thumbnailSets;
-        private readonly Point _listViewLocation;
-        private readonly Size _listViewSize;
+        private ImageBrowserPresenter2 _presenter;
+        private readonly Control _listViewParentContainer;
+        public event ImageBrowserViewDirectorySelectedHandler DirectorySelected;
+        public event ImageBrowserViewEventDelegate2 BrowserViewLoad;
 
         public Form2()
         {
             InitializeComponent();
-            _listViewLocation = listView1.Location;
-            _listViewSize = listView1.Size;
-            var imageProviderFactory = new SimpleBitmapThumbnailGetterFactory(100);
-            var fileSetFactory = new BlockingLoadFilesAsyncListViewFileSetFactory(imageProviderFactory,InitializeListView);
-            _thumbnailSets = new ThumbnailSets(listView1.Parent, new[] { "*.jpg", "*.bmp", "*.png" }, fileSetFactory);
+            _presenter = new ImageBrowserPresenter2(this);
+             _listViewParentContainer = listView1.Parent;
+       }
+
+        public DirectoryTree DirectoryTree
+        {
+            get { return directoryTree1; }
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            directoryTree1.InitDrives();
-            directoryTree1.DirectorySelected += DirectorySelected;
-            UpdateStatusBar();
+            if (BrowserViewLoad != null)
+                BrowserViewLoad(this, this);
+
+            //directoryTree1.InitDrives();
+            //directoryTree1.DirectorySelected += OnDirectorySelected;
         }
 
-        private  void InitializeListView(ListView listView)
+        public Control ListViewParentContainer { get { return _listViewParentContainer; } }
+
+        public void InitializeListView(ListView listView)
         {
             listView.View = View.LargeIcon;
             listView.LabelEdit = false;
@@ -40,51 +48,65 @@ namespace ImageBrowser
             listView.Scrollable = true;
             listView.Dock = DockStyle.Fill;
             listView.UseCompatibleStateImageBehavior = false;
-            listView.Location = _listViewLocation;
-            listView.Size = _listViewSize;
+            listView.Location = listView1.Location;
+            listView.Size = listView1.Size;
         }
 
-        private void DirectorySelected(DirectoryInfo dir)
+        public void OnDirectorySelected(DirectoryInfo dir)
         {
-            UpdateStatusBar(dir.FullName);
-            _thumbnailSets.DisplayList(dir, ref listView1);
-            UpdateStatusBar(dir.FullName);
+            if (DirectorySelected != null)
+                DirectorySelected(this,dir,ref listView1);
+            //UpdateStatusBar(dir.FullName);
+            //_thumbnailSets.DisplayList(dir, ref listView1);
+            //UpdateStatusBar(dir.FullName);
         }
 
         #region StatusBar updates
-        private void UpdateStatusBar(string dir = null)
+        public void UpdateDirStatus(string msg)
         {
-            if (dir != null)
-                toolStripDirInfo.Text = dir;
-
-            var memoryUsed = GetMemoryUsed();
-            toolStripAppInfo.Text = memoryUsed;
-
-            UpdateImageListCount();
+            toolStripDirInfo.Text = msg;
         }
-
-        private void UpdateImageListCount()
+        public void UpdateAppStatus(string msg)
         {
-            if (listView1.LargeImageList != null)
-            {
-                var numLoaded = listView1.LargeImageList.Images.Count - 1;
-                var numFiles = listView1.Items.Count;
-                toolStripImagesInfo.Text = string.Format("{0} of {1} images loaded", numLoaded, numFiles);
-            }
+            toolStripAppInfo.Text = msg;
         }
-
-        private static string GetMemoryUsed()
+        public void UpdateFilesStatus(string msg)
         {
-            long privateBytes;
-            using (var proc = Process.GetCurrentProcess())
-            {
-                proc.Refresh();
-                privateBytes = proc.PrivateMemorySize64;
-            }
-
-            var memoryUsed = string.Format("App PrivateBytes: {0:N0} KB", privateBytes / 1024);
-            return memoryUsed;
+            toolStripImagesInfo.Text = msg;
         }
+        //private void UpdateStatusBar(string dir = null)
+        //{
+        //    if (dir != null)
+        //        toolStripDirInfo.Text = dir;
+
+        //    var memoryUsed = GetMemoryUsed();
+        //    toolStripAppInfo.Text = memoryUsed;
+
+        //    UpdateImageListCount();
+        //}
+
+        //private void UpdateImageListCount()
+        //{
+        //    if (listView1.LargeImageList != null)
+        //    {
+        //        var numLoaded = listView1.LargeImageList.Images.Count - 1;
+        //        var numFiles = listView1.Items.Count;
+        //        toolStripImagesInfo.Text = string.Format("{0} of {1} images loaded", numLoaded, numFiles);
+        //    }
+        //}
+
+        //private static string GetMemoryUsed()
+        //{
+        //    long privateBytes;
+        //    using (var proc = Process.GetCurrentProcess())
+        //    {
+        //        proc.Refresh();
+        //        privateBytes = proc.PrivateMemorySize64;
+        //    }
+
+        //    var memoryUsed = string.Format("App PrivateBytes: {0:N0} KB", privateBytes / 1024);
+        //    return memoryUsed;
+        //}
 
         #endregion
 

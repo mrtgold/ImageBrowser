@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace ImageBrowserLogic
 {
@@ -37,6 +40,9 @@ namespace ImageBrowserLogic
             var sw = Stopwatch.StartNew();
             var listViewFileSet = GetListViewFileSet(dir);
 
+            if (_container == null || listViewFileSet.ListView == null) return;
+
+            //if (!_container.Controls.Contains(listViewFileSet.ListView))
             if (!ReferenceEquals(previousListView, listViewFileSet.ListView))
             {
                 _container.SuspendLayout();
@@ -44,6 +50,11 @@ namespace ImageBrowserLogic
 
                 _container.Controls.Add(listViewFileSet.ListView);
                 Trace.WriteLine(string.Format("after add: {0} msec", sw.ElapsedMilliseconds));
+
+                //foreach (var control in _container.Controls.OfType<ListView>().Where(c => !ReferenceEquals(c,listViewFileSet.ListView)))
+                //{
+                //    _container.Controls.Remove(control);
+                //}
 
                 _container.Controls.Remove(previousListView);
                 Trace.WriteLine(string.Format("after remove: {0} msec", sw.ElapsedMilliseconds));
