@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Timers;
 using System.Windows.Forms;
 using ImageBrowserLogic;
@@ -16,11 +17,13 @@ namespace ImageBrowserPresenter
 
     public class ImageBrowserPresenter2
     {
+        private const int StatusPollingIntervalMsec = 2000; //50;
+
         private readonly IImageBrowserView2 _view;
         private ThumbnailSets _thumbnailSets;
         private DirectoryInfo _currentDir;
 
-        private Timer _timer;
+        private static Timer _timer;
 
         public ImageBrowserPresenter2(IImageBrowserView2 view)
         {
@@ -45,14 +48,14 @@ namespace ImageBrowserPresenter
 
         private void InitTimer()
         {
-            _timer = new Timer(2000) {AutoReset = true};
-            _timer.Start();
+            _timer = new Timer(StatusPollingIntervalMsec) { AutoReset = true };
             _timer.Elapsed += TimerOnElapsed;
+            _timer.Start();
         }
 
         private void TimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            UpdateAppStatus();
+            UpdateStatusBar();
         }
 
 
@@ -76,8 +79,7 @@ namespace ImageBrowserPresenter
 
         private void UpdateAppStatus()
         {
-            var memoryUsed = GetMemoryUsed();
-            _view.UpdateAppStatus(memoryUsed);
+            _view.UpdateAppStatus(GetMemoryUsed() + GetImagesLoaded());
         }
 
         private void UpdateImageListCount()
@@ -103,8 +105,16 @@ namespace ImageBrowserPresenter
                 privateBytes = proc.PrivateMemorySize64;
             }
 
-            var memoryUsed = string.Format("App PrivateBytes: {0:N0} KB", privateBytes / 1024);
+            var memoryUsed = string.Format("  PrivateBytes: {0:N0} KB  ", privateBytes / 1024);
             return memoryUsed;
+        }
+
+        private string GetImagesLoaded()
+        {
+            var imageCount = _thumbnailSets.Select(dir => dir.Value).Sum(node => node.ImageList.Images.Count-1);
+
+            var imagesLoaded = string.Format("  Images loaded: {0:N0}  ", imageCount);
+            return imagesLoaded;
         }
 
     }
