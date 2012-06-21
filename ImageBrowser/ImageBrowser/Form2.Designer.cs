@@ -35,7 +35,6 @@ namespace ImageBrowser
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripAppInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripImagesInfo = new System.Windows.Forms.ToolStripStatusLabel();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.directoryTree1 = new DirectoryBrowser.DirectoryTree();
@@ -86,12 +85,6 @@ namespace ImageBrowser
             this.toolStripImagesInfo.Size = new System.Drawing.Size(0, 20);
             this.toolStripImagesInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // imageList1
-            // 
-            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -132,6 +125,7 @@ namespace ImageBrowser
             // 
             // directoryTree1
             // 
+            this.directoryTree1.DirectorySelected = null;
             this.directoryTree1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.directoryTree1.ImageIndex = 0;
             this.directoryTree1.Location = new System.Drawing.Point(0, 0);
@@ -156,7 +150,7 @@ namespace ImageBrowser
             this.ClientSize = new System.Drawing.Size(792, 455);
             this.Controls.Add(this.splitContainer2);
             this.Name = "Form2";
-            this.Text = "Form2";
+            this.Text = "Image Browser";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -179,7 +173,6 @@ namespace ImageBrowser
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripAppInfo;
         private System.Windows.Forms.ToolStripStatusLabel toolStripImagesInfo;
-        private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private DirectoryBrowser.DirectoryTree directoryTree1;
