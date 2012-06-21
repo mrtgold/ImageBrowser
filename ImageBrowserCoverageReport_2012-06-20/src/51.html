@@ -1,0 +1,150 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_51 = [
+  ];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src51" class="dotCoverSource"><pre>using System.IO;
+using System.Linq;
+using DirectoryBrowser;
+using NUnit.Framework;
+
+namespace DirectoryBrowserTests
+{
+    [TestFixture]
+    public class DirectoryNodeShould : DirectoryTester
+    {
+        [SetUp]
+        public override void Setup()
+        {
+            base.Setup();
+            MakeSubDirs(TargetDirectory);
+        }
+
+        [Test]
+        public void Make()
+        {
+            var node = new DirectoryNode(TargetDirectory, null);
+            Assert.AreEqual(TargetDirectory, node.RootDir);
+            Assert.AreEqual(TargetDirectory.Name, node.Text);
+        }
+
+        [Test]
+        public void PopulateSubDirs()
+        {
+            var node = new DirectoryNode(TargetDirectory, null);
+            Assert.IsFalse(node.IsExpanded);
+
+            node.PopulateSubDirs();
+
+            var expected = TargetDirectory.GetDirectories().Select(d =&gt; new DirectoryNode(d, node));
+            CollectionAssert.AreEquivalent(expected, node.SubDirs);
+            Assert.IsTrue(node.ThisLevelEnumerated);
+        }
+
+        [Test]
+        public void SetErrorFlagPopulateSubDirs()
+        {
+            var node = new DirectoryNode(new DirectoryInfo(@&quot;C:\NotGonnaFindMe&quot;), null);
+            node.PopulateSubDirs();
+
+            Assert.IsTrue(node.HasError);
+        }
+
+        [Test]
+        public void PopulateSubDirsOnBeforeExpand()
+        {
+            var node = new DirectoryNode(TargetDirectory, null);
+            Assert.IsFalse(node.ThisLevelEnumerated);
+            node.BeforeExpand();
+            Assert.IsTrue(node.ThisLevelEnumerated);
+        }
+
+        [Test]
+        public void ThisLevelEnumeratedOnlyAfterSubDirsEnumerated()
+        {
+            var node = new DirectoryNode(TargetDirectory, null);
+            Assert.IsFalse(node.ThisLevelEnumerated);
+            node.PopulateSubDirs();
+            Assert.IsTrue(node.ThisLevelEnumerated);
+        }
+
+
+        [Test]
+        public void AllChildrenEnumeratedOnlyAfterAllSubDirsAllChildrenEnumerated()
+        {
+            DirectoryInfo dir = TargetDirectory.GetDirectories().First();
+            MakeSubDirs(dir);
+            var node = new DirectoryNode(TargetDirectory, null);
+            Assert.IsFalse(node.AllChildrenEnumerated);
+            node.PopulateSubDirs();
+            Assert.IsFalse(node.AllChildrenEnumerated);
+
+            foreach (var subDir in node.SubDirs)
+            {
+                subDir.PopulateSubDirs();
+            }
+            Assert.IsFalse(node.AllChildrenEnumerated);
+
+            foreach (var subDir in node.SubDirs)
+            {
+                foreach (var subSubDir in subDir.SubDirs)
+                {
+                    subSubDir.PopulateSubDirs();
+                }
+            }
+            Assert.IsTrue(node.AllChildrenEnumerated);
+
+        }
+
+
+        [Test]
+        public void ValidateEquality()
+        {
+            var one = new DirectoryNode(TargetDirectory, null);
+            var oneRef = one;
+            var oneToo = new DirectoryNode(TargetDirectory, null);
+            var two = new DirectoryNode(TargetDirectory.Parent, null);
+
+            Assert.IsTrue(one.Equals(oneRef));
+            oneRef = null;
+            // ReSharper disable ExpressionIsAlwaysNull
+            Assert.IsFalse(one.Equals(oneRef));
+            // ReSharper restore ExpressionIsAlwaysNull
+            Assert.AreEqual(one, oneToo);
+            Assert.AreEqual(one.GetHashCode(), oneToo.GetHashCode());
+            Assert.AreEqual(one.ToString(), oneToo.ToString());
+
+            Assert.AreNotEqual(one, two);
+            var shouldBeTrue = one == oneToo;
+            Assert.IsTrue(shouldBeTrue);
+
+            var shouldBeFalse = one != oneToo;
+            Assert.IsFalse(shouldBeFalse);
+
+            Assert.IsFalse(one.Equals(new object()));
+
+        }
+
+        [Test]
+        public void SetNodeType()
+        {
+            Assert.AreEqual(DirectoryNode.TreeViewNodeType.Computer, new DirectoryNode(null,null).NodeType);
+            Assert.AreEqual(DirectoryNode.TreeViewNodeType.Drive, new DirectoryNode(new DirectoryInfo(@&quot;C:\&quot;), null).NodeType);
+            Assert.AreEqual(DirectoryNode.TreeViewNodeType.Folder, new DirectoryNode(TargetDirectory, null).NodeType);
+        }
+
+        private static void MakeSubDirs(DirectoryInfo dir)
+        {
+            dir.CreateSubdirectory(&quot;1&quot;);
+            dir.CreateSubdirectory(&quot;2&quot;);
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src51', RANGES_51)
+		</script>
+	</body>
+</html>

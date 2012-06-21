@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_53 = [
+   [21,9,21,10,'dccv']
+, [22,13,22,45,'dccv']
+, [23,13,23,98,'dccv']
+, [24,13,24,90,'dccv']
+, [25,13,25,89,'dccv']
+, [26,13,26,103,'dccv']
+, [27,13,27,101,'dccv']
+, [28,13,28,88,'dccv']
+, [29,13,29,84,'dccv']
+, [30,13,30,30,'dccv']
+, [31,9,31,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src53" class="dotCoverSource"><pre>using System.Windows.Forms;
+using DirectoryBrowser.Properties;
+
+namespace DirectoryBrowser
+{
+    public static class DirectoryBrowserImageList
+    {
+
+        public enum TreeViewImages
+        {
+            Computer = 1,
+            Drive,
+            OpenFolder,
+            ClosedFolder,
+            StuffedFolder,
+            Warning,
+            Error,
+        }
+
+        public static ImageList GetImageList()
+        {
+            var imageList = new ImageList();
+            imageList.Images.Add(TreeViewImages.ClosedFolder.ToString(), Resources.Folder_48x48);
+            imageList.Images.Add(TreeViewImages.Computer.ToString(), Resources.Computer);
+            imageList.Images.Add(TreeViewImages.Drive.ToString(), Resources.Hard_Drive);
+            imageList.Images.Add(TreeViewImages.OpenFolder.ToString(), Resources.FolderOpen_48x48_72);
+            imageList.Images.Add(TreeViewImages.StuffedFolder.ToString(), Resources.Stuffed_Folder);
+            imageList.Images.Add(TreeViewImages.Warning.ToString(), Resources.Warning);
+            imageList.Images.Add(TreeViewImages.Error.ToString(), Resources.error);
+            return imageList;
+        }
+
+    }
+}
+</pre></code><script type="text/javascript">
+			applyranges('src53', RANGES_53)
+		</script>
+	</body>
+</html>

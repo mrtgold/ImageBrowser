@@ -57,7 +57,7 @@ namespace ImageBrowserLogicTests.ImageProviders
 
             //result.AsyncWaitHandle.WaitOne(); //doesn't wait for callback complete, just callback init
 
-            Assert.IsTrue(done.Wait(5000));
+            Assert.IsTrue(done.Wait(60000));
             Assert.IsFalse(result.CompletedSynchronously);
             Assert.IsTrue(callbackCompleted);
         }

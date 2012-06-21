@@ -1,0 +1,91 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_81 = [
+   [11,9,12,67,'dccv']
+, [13,9,13,10,'dccv']
+, [14,9,14,10,'dccv']
+, [17,9,17,10,'dccv']
+, [18,13,18,37,'dccv']
+, [19,13,19,34,'dccv']
+, [20,9,20,10,'dccv']
+, [23,9,23,10,'dccv']
+, [24,13,24,43,'dccv']
+, [26,13,26,20,'dccv']
+, [26,34,26,38,'dccv']
+, [26,22,26,30,'dccv']
+, [27,13,27,14,'dccv']
+, [28,17,28,79,'dccv']
+, [29,13,29,14,'dccv']
+, [26,31,26,33,'dccv']
+, [30,13,30,23,'dccv']
+, [31,13,31,132,'dccv']
+, [32,9,32,10,'dccv']
+, [35,9,35,10,'dccv']
+, [36,13,36,43,'dccv']
+, [38,13,38,20,'dccv']
+, [38,34,38,38,'dccv']
+, [38,22,38,30,'dccv']
+, [39,13,39,14,'dccv']
+, [40,17,40,39,'dccv']
+, [41,13,41,14,'dccv']
+, [38,31,38,33,'dccv']
+, [42,13,42,23,'dccv']
+, [43,13,43,129,'dccv']
+, [44,9,44,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src81" class="dotCoverSource"><pre>using System;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
+using ImageBrowserLogic.ImageProviders;
+
+namespace ImageBrowserLogic.LoadingStrategies
+{
+    public class ListViewFileSet_BlockingLoadFilesAsyncLoadImages : ListViewFileSetBase
+    {
+        public ListViewFileSet_BlockingLoadFilesAsyncLoadImages(DirectoryInfo dir, IImageProviderFactory factory, Action&lt;ListView&gt; initializeListView, params string[] filePatterns)
+            : base(dir, initializeListView, factory, filePatterns)
+        {
+        }
+
+        public override void BeginLoadingImages()
+        {
+            BlockingLoadFilesOnly();
+            AsyncAddRealImages();
+        }
+
+        private void BlockingLoadFilesOnly()
+        {
+            var sw = Stopwatch.StartNew();
+
+            foreach (var node in this)
+            {
+                ListView.Items.Add(node.Key, node.File.Name, DefaultImageKey);
+            }
+            sw.Stop();
+            Trace.WriteLine(string.Format(&quot;BlockingLoadFilesOnly: loaded {0} default in {1} msec&quot;, Count, sw.ElapsedMilliseconds));
+        }
+
+        private void AsyncAddRealImages()
+        {
+            var sw = Stopwatch.StartNew();
+
+            foreach (var node in this)
+            {
+                node.BeginLoadImage();
+            }
+            sw.Stop();
+            Trace.WriteLine(string.Format(&quot;AsyncAddRealImages: loaded {0} default in {1} msec&quot;, Count, sw.ElapsedMilliseconds));
+        }
+
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src81', RANGES_81)
+		</script>
+	</body>
+</html>

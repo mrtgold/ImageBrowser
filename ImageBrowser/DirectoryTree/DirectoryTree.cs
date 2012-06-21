@@ -93,7 +93,7 @@ namespace DirectoryBrowser
         {
             var node = treeNode as DirectoryNode;
             if (node == null)
-                throw new Exception(string.Format("huh?? node {0} is {1}", treeNode.Text, treeNode.GetType()));
+                throw new Exception(string.Format("huh?? node '{0}' is a '{1}'", treeNode.Text, treeNode.GetType()));
             return node;
         }
 

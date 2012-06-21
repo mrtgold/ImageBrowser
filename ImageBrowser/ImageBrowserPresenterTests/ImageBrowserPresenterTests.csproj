@@ -43,8 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageBrowserPresenter2Should.cs" />
-    <Compile Include="ImageBrowserPresenterShould.cs" />
+    <Compile Include="PresenterShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StubDirectoryTree.cs" />
   </ItemGroup>

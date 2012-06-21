@@ -1,0 +1,62 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_64 = [
+  ];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src64" class="dotCoverSource"><pre>using System;
+using System.IO;
+using System.Windows.Forms;
+using ImageBrowserLogic.ImageProviders;
+using ImageBrowserLogic.LoadingStrategies;
+using NUnit.Framework;
+
+namespace ImageBrowserLogicTests.LoadingStrategies
+{
+    [TestFixture]
+    public class ListViewFileSetBaseShould
+    {
+        [Test]
+        public void ReturnZeroForNoItems()
+        {
+            var fileSet = new SpyListViewFileSet();
+            Assert.AreEqual(0, fileSet.ImagesLoaded);
+        }
+
+        [Test]
+        public void ReturnZeroForNullList()
+        {
+            var fileSet = new SpyListViewFileSet {ListView = null};
+            Assert.AreEqual(0, fileSet.ImagesLoaded);
+        }
+
+        [Test]
+        public void ReturnNullStatusMessageForNullList()
+        {
+            var fileSet = new SpyListViewFileSet {ListView = null};
+            Assert.IsNull(fileSet.StatusMessage);
+        }
+
+        private class SpyListViewFileSet : ListViewFileSetBase
+        {
+            public bool BeginLoadingImages_WasCalled;
+
+            public SpyListViewFileSet(DirectoryInfo dir = null, Action&lt;ListView&gt; initializeListView = null, IImageProviderFactory imageProviderFactory = null, params string[] filePatterns)
+                : base(dir, initializeListView, imageProviderFactory, filePatterns)
+            {
+            }
+
+            public override void BeginLoadingImages()
+            {
+                BeginLoadingImages_WasCalled = true;
+            }
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src64', RANGES_64)
+		</script>
+	</body>
+</html>

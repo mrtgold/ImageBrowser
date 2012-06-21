@@ -1,0 +1,200 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_87 = [
+   [19,9,19,53,'dccv']
+, [27,9,27,49,'dccv']
+, [28,9,28,10,'dccv']
+, [29,13,29,26,'dccv']
+, [30,13,30,62,'dccv']
+, [31,13,31,58,'dccv']
+, [32,9,32,10,'dccv']
+, [35,9,35,10,'dccv']
+, [36,13,36,45,'dccv']
+, [37,13,37,78,'dccv']
+, [39,13,39,84,'dccv']
+, [40,13,40,131,'dccv']
+, [41,13,41,131,'dccv']
+, [43,13,43,25,'dccv']
+, [44,9,44,10,'dccv']
+, [47,9,47,10,'dccv']
+, [48,13,48,80,'dccv']
+, [49,13,49,46,'dccv']
+, [50,13,50,28,'dccv']
+, [51,9,51,10,'dccv']
+, [54,9,54,10,'dccv']
+, [55,13,55,31,'dccv']
+, [56,9,56,10,'dccv']
+, [60,9,60,10,'dccv']
+, [61,13,61,31,'dccv']
+, [62,13,62,43,'dccv']
+, [63,13,63,60,'dccv']
+, [64,13,64,43,'dccv']
+, [65,9,65,10,'dccv']
+, [69,9,69,10,'dccv']
+, [70,13,70,29,'dccv']
+, [71,17,71,44,'dccv']
+, [73,13,73,31,'dccv']
+, [75,13,75,36,'dccv']
+, [76,9,76,10,'dccv']
+, [79,9,79,10,'dccv']
+, [80,13,80,72,'dccv']
+, [81,9,81,10,'dccv']
+, [84,9,84,10,'dccv']
+, [86,20,86,58,'dccv']
+, [87,13,87,14,'dccv']
+, [88,17,88,32,'dccv']
+, [89,17,89,57,'dccv']
+, [90,13,90,14,'dccv']
+, [92,13,92,96,'dccv']
+, [93,13,93,31,'dccv']
+, [94,9,94,10,'dccv']
+, [97,9,97,10,'dccv']
+, [98,13,98,32,'dccv']
+, [99,13,99,40,'dccv']
+, [108,17,108,58,'dccv']
+, [108,82,108,84,'dccv']
+, [111,13,111,90,'dccv']
+, [112,13,112,36,'dccv']
+, [113,9,113,10,'dccv']
+, [116,9,116,10,'dccv']
+, [117,13,117,58,'dccv']
+, [117,59,117,66,'dccv']
+, [118,13,118,75,'dccv']
+, [119,13,119,39,'dccv']
+, [120,17,120,56,'dccv']
+, [121,9,121,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src87" class="dotCoverSource"><pre>using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Timers;
+using System.Windows.Forms;
+using ImageBrowserLogic;
+using ImageBrowserLogic.ImageProviders;
+using ImageBrowserLogic.LoadingStrategies;
+using Timer = System.Timers.Timer;
+
+namespace ImageBrowserPresenter
+{
+    public delegate void ImageBrowserViewEventDelegate2(object sender, IImageBrowserView view);
+    public delegate void ImageBrowserViewDirectorySelectedHandler(object sender, DirectoryInfo dir, ref ListView listView1);
+
+
+    public class Presenter
+    {
+        public int StatusPollingIntervalMsec = 2000; //50;
+
+        private readonly IImageBrowserView _view;
+        private ThumbnailSets _thumbnailSets;
+        private DirectoryInfo _currentDir;
+
+        private static Timer _timer;
+
+        public Presenter(IImageBrowserView view)
+        {
+            _view = view;
+            view.DirectorySelected += view_DirectorySelected;
+            view.BrowserViewLoad += view_BrowserViewLoad;
+        }
+
+        void view_BrowserViewLoad(object sender, IImageBrowserView view)
+        {
+            view.DirectoryTree.InitDrives();
+            view.DirectoryTree.DirectorySelected += view.OnDirectorySelected;
+
+            var imageProviderFactory = new SimpleBitmapThumbnailGetterFactory(100);
+            var fileSetFactory = new BlockingLoadFilesAsyncListViewFileSetFactory(imageProviderFactory, _view.InitializeListView);
+            _thumbnailSets = new ThumbnailSets(view.ListViewParentContainer, new[] { &quot;*.jpg&quot;, &quot;*.bmp&quot;, &quot;*.png&quot; }, fileSetFactory);
+
+            InitTimer();
+        }
+
+        private void InitTimer()
+        {
+            _timer = new Timer(StatusPollingIntervalMsec) { AutoReset = true };
+            _timer.Elapsed += TimerOnElapsed;
+            _timer.Start();
+        }
+
+        private void TimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            UpdateStatusBar();
+        }
+
+
+        void view_DirectorySelected(object sender, DirectoryInfo dir, ref ListView listView1)
+        {
+            _currentDir = dir;
+            UpdateStatusBar(dir.FullName);
+            _thumbnailSets.DisplayList(dir, ref listView1);
+            UpdateStatusBar(dir.FullName);
+        }
+
+        #region Status bar updates
+        private void UpdateStatusBar(string dir = null)
+        {
+            if (dir != null)
+                _view.UpdateDirStatus(dir);
+
+            UpdateAppStatus();
+
+            UpdateImageListCount();
+        }
+
+        private void UpdateAppStatus()
+        {
+            _view.UpdateAppStatus(GetMemoryUsed() + GetImagesLoaded());
+        }
+
+        private static string GetMemoryUsed()
+        {
+            long privateBytes;
+            using (var proc = Process.GetCurrentProcess())
+            {
+                proc.Refresh();
+                privateBytes = proc.PrivateMemorySize64;
+            }
+
+            var memoryUsed = string.Format(&quot;  PrivateBytes: {0:N0} KB  &quot;, privateBytes / 1024);
+            return memoryUsed;
+        }
+
+        private string GetImagesLoaded()
+        {
+            var imageCount = 0;
+            if (_thumbnailSets != null)
+                //foreach (var thumbnailSet in _thumbnailSets)
+                //{
+                //    try
+                //    {
+                //        imageCount += thumbnailSet.Value.ImageList.Images.Count - 1;
+                //    }
+                //    catch { }
+                //}
+                imageCount = _thumbnailSets.Sum(entry =&gt; entry.Value.ImagesLoaded);
+
+            //imageCount = _thumbnailSets.Select(dir =&gt; dir.Value).Sum(node =&gt; node.ImageList.Images.Count - 1);
+            var imagesLoadedMsg = string.Format(&quot;  Images loaded: {0:N0}  &quot;, imageCount);
+            return imagesLoadedMsg;
+        }
+
+        private void UpdateImageListCount()
+        {
+            if (!_thumbnailSets.ContainsKey(_currentDir)) return;
+            var statusMessage = _thumbnailSets[_currentDir].StatusMessage;
+            if (statusMessage != null)
+                _view.UpdateFilesStatus(statusMessage);
+        }
+
+        #endregion
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src87', RANGES_87)
+		</script>
+	</body>
+</html>

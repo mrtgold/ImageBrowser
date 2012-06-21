@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_77 = [
+   [7,9,7,77,'dccv']
+, [8,9,8,10,'dccv']
+, [9,13,9,60,'dccv']
+, [10,9,10,10,'dccv']
+, [13,9,13,10,'dccv']
+, [14,13,14,76,'dccv']
+, [15,9,15,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src77" class="dotCoverSource"><pre>namespace ImageBrowserLogic.ImageProviders
+{
+    public class SimpleBitmapThumbnailGetterFactory : IImageProviderFactory
+    {
+        private readonly int _thumbnailSizeInPixels;
+
+        public SimpleBitmapThumbnailGetterFactory(int thumbnailSizeInPixels)
+        {
+            _thumbnailSizeInPixels = thumbnailSizeInPixels;
+        }
+
+        public IImageProvider Build()
+        {
+            return new SimpleBitmapThumbnailGetter(_thumbnailSizeInPixels);
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src77', RANGES_77)
+		</script>
+	</body>
+</html>

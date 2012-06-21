@@ -1,0 +1,193 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_85 = [
+  ];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src85" class="dotCoverSource"><pre>using System.IO;
+using System.Threading;
+using System.Windows.Forms;
+using DirectoryBrowser;
+using ImageBrowserLogicTests;
+using ImageBrowserPresenter;
+using NUnit.Framework;
+
+namespace ImageBrowserPresenterTests
+{
+    [TestFixture]
+    public class PresenterShould : DirectoryTester
+    {
+        private IDirectoryTree _directoryTree;
+        private IImageBrowserView _view;
+        private Presenter _presenter;
+        private StubImageBrowserView _viewAsStub;
+        private StubDirectoryTree _dirTreeAsStub;
+
+        [SetUp]
+        public override void Setup()
+        {
+            base.Setup();
+            _view = new StubImageBrowserView();
+            _viewAsStub = ((StubImageBrowserView)_view);
+
+            _directoryTree = new StubDirectoryTree();
+            _dirTreeAsStub = ((StubDirectoryTree)_directoryTree);
+
+            _viewAsStub.DirectoryTree = _directoryTree;
+        }
+
+        [Test]
+        public void PresenterRegistersAsListenerForDirectorySelectedEvent()
+        {
+            Assert.AreEqual(0, _viewAsStub.DirectorySelectedListenerCount);
+            var presenter = new Presenter(_view);
+
+            const int expectedListenersCount = 1;
+            var actualListenersCount = _viewAsStub.DirectorySelectedListenerCount;
+            Assert.AreEqual(expectedListenersCount, actualListenersCount);
+        }
+
+        [Test]
+        public void PresenterRegistersAsListenerForLoadEvent()
+        {
+            Assert.AreEqual(0, _viewAsStub.ImageBrowserViewLoadListenerCount);
+            var presenter = new Presenter(_view);
+
+            const int expectedListenersCount = 1;
+            var actualListenersCount = _viewAsStub.ImageBrowserViewLoadListenerCount;
+            Assert.AreEqual(expectedListenersCount, actualListenersCount);
+        }
+
+        [Test]
+        public void InitDirectoryDuringViewLoad()
+        {
+            var presenter = new Presenter(_view);
+
+            Assert.IsFalse(_dirTreeAsStub.InitDrives_Called);
+            _viewAsStub.FireBrowserViewLoadEvent();
+            Assert.IsTrue(_dirTreeAsStub.InitDrives_Called);
+        }
+
+        [Test]
+        public void PopulateAndSwapListViewsWhenDirectorySelectedEventFired()
+        {
+            _presenter = new Presenter(_view);
+            _viewAsStub.FireBrowserViewLoadEvent();
+
+            _viewAsStub.DirSelected = new DirectoryInfo(TargetDirectory.FullName);
+            _viewAsStub.FireDirectorySelectedEvent();
+
+        }
+
+        [Test]
+        public void UpdateStatusAfterDirectorySelected()
+        {
+            _presenter = new Presenter(_view);
+
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateAppStatus_Message));
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateDirStatus_Message));
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateFilesStatus_Message));
+
+            _viewAsStub.FireBrowserViewLoadEvent();
+
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateAppStatus_Message));
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateDirStatus_Message));
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateFilesStatus_Message));
+
+            _viewAsStub.DirSelected = new DirectoryInfo(TargetDirectory.FullName);
+            _viewAsStub.FireDirectorySelectedEvent();
+
+            Assert.IsFalse(string.IsNullOrEmpty(_viewAsStub.UpdateAppStatus_Message));
+            Assert.IsFalse(string.IsNullOrEmpty(_viewAsStub.UpdateDirStatus_Message));
+            Assert.IsFalse(string.IsNullOrEmpty(_viewAsStub.UpdateFilesStatus_Message));
+        }
+
+        [Test]
+        public void UpdateStatusOnTimer()
+        {
+            _presenter = new Presenter(_view);
+
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateAppStatus_Message));
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateDirStatus_Message));
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateFilesStatus_Message));
+
+            _viewAsStub.FireBrowserViewLoadEvent();
+
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateAppStatus_Message));
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateDirStatus_Message));
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateFilesStatus_Message));
+
+            Thread.Sleep(_presenter.StatusPollingIntervalMsec *2);
+
+            Assert.IsFalse(string.IsNullOrEmpty(_viewAsStub.UpdateAppStatus_Message));
+
+            //still no directory or files set
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateDirStatus_Message));
+            Assert.IsTrue(string.IsNullOrEmpty(_viewAsStub.UpdateFilesStatus_Message));
+
+        }
+    }
+
+    class StubImageBrowserView : IImageBrowserView
+    {
+        public ListView ListView;
+        public string UpdateDirStatus_Message;
+        public string UpdateAppStatus_Message;
+        public string UpdateFilesStatus_Message;
+
+        public event ImageBrowserViewDirectorySelectedHandler DirectorySelected;
+        public event ImageBrowserViewEventDelegate2 BrowserViewLoad;
+        public Control ListViewParentContainer { get; private set; }
+        public IDirectoryTree DirectoryTree { get; set; }
+
+        public void OnDirectorySelected(DirectoryInfo dir)
+        {
+        }
+
+        public void UpdateDirStatus(string msg)
+        {
+            UpdateDirStatus_Message = msg;
+        }
+
+        public void UpdateAppStatus(string msg)
+        {
+            UpdateAppStatus_Message = msg;
+        }
+
+        public void UpdateFilesStatus(string msg)
+        {
+            UpdateFilesStatus_Message = msg;
+        }
+
+        public void InitializeListView(ListView listView)
+        {
+            listView.Name = &quot;Initialized by StubImageBrowserView&quot;;
+        }
+
+        public int ImageBrowserViewLoadListenerCount { get { return BrowserViewLoad != null ? BrowserViewLoad.GetInvocationList().Length : 0; } }
+
+        public int DirectorySelectedListenerCount { get { return DirectorySelected != null ? DirectorySelected.GetInvocationList().Length : 0; } }
+
+
+        public void FireBrowserViewLoadEvent()
+        {
+            if (BrowserViewLoad != null)
+                BrowserViewLoad(this, this);
+        }
+
+        public void FireDirectorySelectedEvent()
+        {
+            if (DirectorySelected != null)
+                DirectorySelected(this, DirSelected, ref ListView);
+        }
+
+        public DirectoryInfo DirSelected { get; set; }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src85', RANGES_85)
+		</script>
+	</body>
+</html>

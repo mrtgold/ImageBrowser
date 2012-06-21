@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_68 = [
+  ];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src68" class="dotCoverSource"><pre>using ImageBrowserLogic.ImageProviders;
+using NUnit.Framework;
+
+namespace ImageBrowserLogicTests.ImageProviders
+{
+    [TestFixture]
+    public class SimpleBitmapThumbnailGetterFactoryShould
+    {
+        [Test]
+        public void ShouldBuild()
+        {
+            const int size = 100;
+            var factory = new SimpleBitmapThumbnailGetterFactory(size);
+            var getter = factory.Build();
+            Assert.IsInstanceOf&lt;SimpleBitmapThumbnailGetter&gt;(getter);
+            Assert.AreEqual(size, ((SimpleBitmapThumbnailGetter)getter).ThumbnailSize);
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src68', RANGES_68)
+		</script>
+	</body>
+</html>

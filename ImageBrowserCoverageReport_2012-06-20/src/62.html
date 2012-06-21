@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_62 = [
+  ];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src62" class="dotCoverSource"><pre>using System.Drawing.Imaging;
+using System.IO;
+using System.Windows.Forms;
+using ImageBrowserLogicTests.Properties;
+
+namespace ImageBrowserLogicTests.LoadingStrategies
+{
+    public class ListViewFileSetTeater : DirectoryTester
+    {
+        protected bool InitializeListView_WasCalled;
+        protected string _file1;
+
+        protected void InitializeListView(ListView listView)
+        {
+            InitializeListView_WasCalled = true;
+        }
+
+        protected string MakeImageFile()
+        {
+            var file1 = Path.Combine(TargetDirectory.FullName, Path.GetRandomFileName() + &quot;.jpg&quot;);
+            Resources.silver_laptop_icon.Save(file1, ImageFormat.Jpeg);
+
+            return file1;
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src62', RANGES_62)
+		</script>
+	</body>
+</html>

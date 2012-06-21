@@ -105,7 +105,7 @@ namespace TestAsync
             if (!_dirs.ContainsKey(dir))
             {
                 //_dirs[dir] = new ListViewFileSet(dir, new BackgroundWorker(), listView1, _filePatterns);
-                listViewFileSet = new ListViewFileSet_BlockingLoadAllDefaultImages(dir,null , _filePatterns);
+                listViewFileSet = new ListViewFileSet_BlockingLoadFilesAsyncLoadImages(dir,null ,null, _filePatterns);
                 _dirs[dir] = listViewFileSet;
             }
             else

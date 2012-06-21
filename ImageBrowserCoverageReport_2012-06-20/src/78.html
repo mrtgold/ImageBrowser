@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_78 = [
+   [13,9,13,128,'dccv']
+, [14,9,14,10,'dccv']
+, [15,13,15,32,'dccv']
+, [16,13,16,54,'dccv']
+, [17,9,17,10,'dccv']
+, [20,9,20,10,'dccv']
+, [21,13,21,130,'dccv']
+, [22,13,22,28,'dccv']
+, [23,9,23,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src78" class="dotCoverSource"><pre>using System;
+using System.IO;
+using System.Windows.Forms;
+using ImageBrowserLogic.ImageProviders;
+
+namespace ImageBrowserLogic.LoadingStrategies
+{
+    public class BlockingLoadFilesAsyncListViewFileSetFactory : IListViewFileSetFactory
+    {
+        private readonly IImageProviderFactory _factory;
+        private readonly Action&lt;ListView&gt; _initializeListView;
+
+        public BlockingLoadFilesAsyncListViewFileSetFactory(IImageProviderFactory factory, Action&lt;ListView&gt; initializeListView)
+        {
+            _factory = factory;
+            _initializeListView = initializeListView;
+        }
+
+        public IListViewFileSet Build(DirectoryInfo dir, string[] filePatterns)
+        {
+            var fileSet = new ListViewFileSet_BlockingLoadFilesAsyncLoadImages(dir, _factory, _initializeListView, filePatterns);
+            return fileSet;
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src78', RANGES_78)
+		</script>
+	</body>
+</html>

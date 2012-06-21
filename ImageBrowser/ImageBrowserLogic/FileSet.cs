@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using ImageBrowserLogic.ImageProviders;
 
 namespace ImageBrowserLogic
 {
     public class FileSet : List<FileNode>, IFileSet
     {
-        public DirectoryInfo Dir { get; set; }
+        public DirectoryInfo Dir { get; private set; }
 
         public FileSet(DirectoryInfo dir, IImageProviderFactory imageProviderFactory, params string[] filePatterns)
         {

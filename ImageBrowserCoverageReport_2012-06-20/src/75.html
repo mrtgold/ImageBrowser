@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_75 = [
+   [10,9,10,36,'dccv']
+, [11,9,11,10,'dccv']
+, [12,13,12,45,'dccv']
+, [13,9,13,10,'dccv']
+, [20,9,20,10,'dccv']
+, [21,13,21,81,'dccv']
+, [23,13,23,27,'dccv']
+, [24,9,24,10,'dccv']
+, [27,9,27,10,'dccv']
+, [29,13,29,61,'dccv']
+, [30,13,30,26,'dccv']
+, [31,9,31,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src75" class="dotCoverSource"><pre>using System;
+using System.Drawing;
+
+namespace ImageBrowserLogic.ImageProviders
+{
+    public abstract class ImageGetterBase : IImageProvider
+    {
+        private readonly AsyncImageFromFileCaller _imageGetter;
+
+        protected ImageGetterBase()
+        {
+            _imageGetter = GetImageGetter();
+        }
+
+        protected abstract AsyncImageFromFileCaller GetImageGetter();
+
+        protected delegate Image AsyncImageFromFileCaller(string filename);
+
+        public IAsyncResult BeginGetImage(AsyncCallback callback, string filename)
+        {
+            var result = _imageGetter.BeginInvoke(filename, callback, filename);
+
+            return result;
+        }
+
+        public Image EndGetImage(IAsyncResult asyncResult)
+        {
+
+            var image = _imageGetter.EndInvoke(asyncResult);
+            return image;
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src75', RANGES_75)
+		</script>
+	</body>
+</html>

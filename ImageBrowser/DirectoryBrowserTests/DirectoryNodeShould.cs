@@ -27,11 +27,31 @@ namespace DirectoryBrowserTests
         public void PopulateSubDirs()
         {
             var node = new DirectoryNode(TargetDirectory, null);
+            Assert.IsFalse(node.IsExpanded);
+
             node.PopulateSubDirs();
 
             var expected = TargetDirectory.GetDirectories().Select(d => new DirectoryNode(d, node));
             CollectionAssert.AreEquivalent(expected, node.SubDirs);
+            Assert.IsTrue(node.ThisLevelEnumerated);
+        }
 
+        [Test]
+        public void SetErrorFlagPopulateSubDirs()
+        {
+            var node = new DirectoryNode(new DirectoryInfo(@"C:\NotGonnaFindMe"), null);
+            node.PopulateSubDirs();
+
+            Assert.IsTrue(node.HasError);
+        }
+
+        [Test]
+        public void PopulateSubDirsOnBeforeExpand()
+        {
+            var node = new DirectoryNode(TargetDirectory, null);
+            Assert.IsFalse(node.ThisLevelEnumerated);
+            node.BeforeExpand();
+            Assert.IsTrue(node.ThisLevelEnumerated);
         }
 
         [Test]

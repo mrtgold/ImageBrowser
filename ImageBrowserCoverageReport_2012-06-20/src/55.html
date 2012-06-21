@@ -1,0 +1,178 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_55 = [
+   [21,9,21,31,'dccv']
+, [22,9,22,10,'dccv']
+, [23,13,23,66,'dccv']
+, [24,9,24,10,'dccv']
+, [27,9,27,10,'dccv']
+, [28,13,28,20,'dccv']
+, [28,31,28,64,'dccv']
+, [28,94,28,95,'dccv']
+, [28,22,28,27,'dccv']
+, [29,13,29,14,'dccv']
+, [30,17,30,49,'dccv']
+, [31,13,31,14,'dccv']
+, [28,28,28,30,'dccv']
+, [32,9,32,10,'dccv']
+, [39,64,39,65,'dccv']
+, [39,66,39,84,'dccv']
+, [39,85,39,86,'dccv']
+, [41,9,41,10,'dccv']
+, [42,13,42,49,'dccv']
+, [44,13,44,33,'dccv']
+, [46,13,46,36,'dccv']
+, [47,13,47,34,'dccv']
+, [48,9,48,10,'dccv']
+, [50,57,50,58,'dccv']
+, [50,59,50,76,'dccv']
+, [50,77,50,78,'dccv']
+, [52,9,52,10,'dccv']
+, [53,13,53,35,'dccv']
+, [54,13,54,34,'dccv']
+, [55,9,55,10,'dccv']
+, [57,64,57,65,'dccv']
+, [57,66,57,84,'dccv']
+, [57,85,57,86,'dccv']
+, [59,9,59,10,'dccv']
+, [60,13,60,36,'dccv']
+, [61,17,61,33,'dccv']
+, [63,13,63,36,'dccv']
+, [64,13,64,34,'dccv']
+, [65,9,65,10,'dccv']
+, [67,57,67,58,'dccv']
+, [67,59,67,76,'dccv']
+, [67,77,67,78,'dccv']
+, [69,9,69,10,'dccv']
+, [70,13,70,49,'dccv']
+, [71,13,71,47,'dccv']
+, [72,13,72,35,'dccv']
+, [74,13,74,34,'dccv']
+, [75,9,75,10,'dccv']
+, [78,9,78,10,'dccv']
+, [79,13,79,43,'dccv']
+, [80,17,80,40,'dccv']
+, [81,9,81,10,'dccv']
+, [87,9,87,10,'dccv']
+, [88,13,88,51,'dccv']
+, [89,13,89,32,'dccv']
+, [90,9,90,10,'dccv']
+, [93,9,93,10,'dccv']
+, [94,13,94,50,'dccv']
+, [95,13,95,30,'dccv']
+, [96,17,96,118,'dccv']
+, [97,13,97,25,'dccv']
+, [98,9,98,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src55" class="dotCoverSource"><pre>using System;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace DirectoryBrowser
+{
+    public interface IDirectoryTree
+    {
+        void InitDrives();
+        void AfterExpanding(TreeViewEventArgs e);
+        void BeforeSelecting(TreeViewCancelEventArgs e);
+        void AfterSelecting(TreeViewEventArgs e);
+        void OnDirectorySelected(DirectoryInfo dir);
+        void BeforeExpanding(TreeViewCancelEventArgs e);
+        DirectoryTree.DirectorySelectedHandler DirectorySelected { get; set; }
+    }
+
+    public class DirectoryTree : TreeView, IDirectoryTree
+    {
+        public DirectoryTree()
+        {
+            ImageList = DirectoryBrowserImageList.GetImageList();
+        }
+
+        public void InitDrives()
+        {
+            foreach (var d in DriveInfo.GetDrives().Where(d =&gt; d.DriveType == DriveType.Fixed))
+            {
+                Nodes.Add(new DirectoryNode(d));
+            }
+        }
+
+        #region Events
+        public delegate void DirectorySelectedHandler(DirectoryInfo dir);
+
+        public DirectorySelectedHandler DirectorySelected { get; set; }
+
+        public void BeforeExpanding(TreeViewCancelEventArgs e) { OnBeforeExpand(e); }
+        protected override void OnBeforeExpand(TreeViewCancelEventArgs e)
+        {
+            var node = GetDirectoryNode(e.Node);
+
+            node.BeforeExpand();
+
+            base.OnBeforeExpand(e);
+            UpdateImages(e.Node);
+        }
+
+        public void AfterExpanding(TreeViewEventArgs e) { OnAfterExpand(e); }
+        protected override void OnAfterExpand(TreeViewEventArgs e)
+        {
+            base.OnAfterExpand(e);
+            UpdateImages(e.Node);
+        }
+
+        public void BeforeSelecting(TreeViewCancelEventArgs e) { OnBeforeSelect(e); }
+        protected override void OnBeforeSelect(TreeViewCancelEventArgs e)
+        {
+            if (!e.Node.IsExpanded)
+                e.Node.Expand();
+
+            base.OnBeforeSelect(e);
+            UpdateImages(e.Node);
+        }
+
+        public void AfterSelecting(TreeViewEventArgs e) { OnAfterSelect(e); }
+        protected override void OnAfterSelect(TreeViewEventArgs e)
+        {
+            var node = GetDirectoryNode(e.Node);
+            OnDirectorySelected(node.RootDir);
+            base.OnAfterSelect(e);
+
+            UpdateImages(e.Node);
+        }
+
+        public void OnDirectorySelected(DirectoryInfo dir)
+        {
+            if (DirectorySelected != null)
+                DirectorySelected(dir);
+        }
+
+        #endregion
+
+        #region Helpers
+        private static void UpdateImages(TreeNode treeNode)
+        {
+            var node = GetDirectoryNode(treeNode);
+            node.UpdateImage();
+        }
+
+        private static DirectoryNode GetDirectoryNode(TreeNode treeNode)
+        {
+            var node = treeNode as DirectoryNode;
+            if (node == null)
+                throw new Exception(string.Format(&quot;huh?? node &#39;{0}&#39; is a &#39;{1}&#39;&quot;, treeNode.Text, treeNode.GetType()));
+            return node;
+        }
+
+        #endregion
+    }
+}
+</pre></code><script type="text/javascript">
+			applyranges('src55', RANGES_55)
+		</script>
+	</body>
+</html>

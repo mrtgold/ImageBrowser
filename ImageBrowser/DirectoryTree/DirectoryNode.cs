@@ -16,7 +16,7 @@ namespace DirectoryBrowser
 
         public DirectoryInfo RootDir { get; private set; }
         private DirectoryNode ParentNode { get; set; }
-        private bool _hasError;
+        public bool HasError { get; private set; }
         private DirectoryBrowserImageList.TreeViewImages _expandedImageKey;
         private DirectoryBrowserImageList.TreeViewImages _collapsedImageKey;
         public IEnumerable<DirectoryNode> SubDirs { get { return Nodes.OfType<DirectoryNode>().ToList(); } }
@@ -73,7 +73,7 @@ namespace DirectoryBrowser
             }
             catch
             {
-                _hasError = true;
+                HasError = true;
                 SetImages();
                 UpdateImage();
             }
@@ -89,7 +89,7 @@ namespace DirectoryBrowser
             return RootDir.FullName;
         }
 
-        public void BeforeExpand()
+        public virtual void BeforeExpand()
         {
             if (!ThisLevelEnumerated)
             {
@@ -97,7 +97,7 @@ namespace DirectoryBrowser
             }
         }
 
-        public void UpdateImage()
+        public virtual void UpdateImage()
         {
             var imageKey = IsExpanded ? _expandedImageKey : _collapsedImageKey;
             ImageKey = imageKey.ToString();
@@ -106,7 +106,7 @@ namespace DirectoryBrowser
 
         private void SetImages()
         {
-            if (_hasError)
+            if (HasError)
                 _expandedImageKey = _collapsedImageKey = DirectoryBrowserImageList.TreeViewImages.Warning;
             else if (NodeType == TreeViewNodeType.Computer)
                 _expandedImageKey = _collapsedImageKey = DirectoryBrowserImageList.TreeViewImages.Computer;

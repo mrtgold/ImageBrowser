@@ -1,0 +1,96 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_79 = [
+   [14,17,14,18,'dccv']
+, [14,19,14,50,'dccv']
+, [14,51,14,52,'dccv']
+, [22,13,22,14,'dccv']
+, [23,17,23,59,'dccv']
+, [23,60,23,72,'dccv']
+, [24,17,24,53,'dccv']
+, [25,17,25,93,'dccv']
+, [26,17,26,28,'dccv']
+, [27,13,27,14,'dccv']
+, [33,13,33,14,'dccv']
+, [34,17,34,59,'dccv']
+, [34,60,34,69,'dccv']
+, [35,17,35,51,'dccv']
+, [36,13,36,14,'dccv']
+, [39,9,40,59,'dccv']
+, [41,9,41,10,'dccv']
+, [42,13,42,74,'dccv']
+, [44,13,44,44,'dccv']
+, [45,17,45,46,'dccv']
+, [46,9,46,10,'dccv']
+, [49,9,49,10,'dccv']
+, [50,13,50,113,'dccv']
+, [51,13,51,101,'dccv']
+, [52,13,52,30,'dccv']
+, [53,9,53,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src79" class="dotCoverSource"><pre>using System;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
+using ImageBrowserLogic.ImageProviders;
+
+namespace ImageBrowserLogic.LoadingStrategies
+{
+    public abstract class ListViewFileSetBase : FileSet, IListViewFileSet
+    {
+        protected const string DefaultImageKey = &quot;default&quot;;
+        public ImageList ImageList
+        {
+            get { return ListView.LargeImageList; }
+        }
+
+        public ListView ListView { get; set; }
+
+        public string StatusMessage
+        {
+            get
+            {
+                if (ListView == null || ImageList == null) return null;
+                var numFiles = ListView.Items.Count;
+                var msg = string.Format(&quot;{0} of {1} images loaded&quot;, ImagesLoaded, numFiles);
+                return msg;
+            }
+        }
+
+        public int ImagesLoaded
+        {
+            get
+            {
+                if (ListView == null || ImageList == null) return 0;
+                return ImageList.Images.Count - 1;
+            }
+        }
+
+        protected ListViewFileSetBase(DirectoryInfo dir, Action&lt;ListView&gt; initializeListView, IImageProviderFactory imageProviderFactory, params string[] filePatterns)
+            : base(dir,imageProviderFactory, filePatterns)
+        {
+            ListView = new ListView {LargeImageList = GetNewImageList()};
+
+            if (initializeListView != null)
+                initializeListView(ListView);
+        }
+
+        private static ImageList GetNewImageList()
+        {
+            var imageList = new ImageList { ImageSize = new Size(100, 100), ColorDepth = ColorDepth.Depth16Bit};
+            imageList.Images.Add(DefaultImageKey, BrowserResources.Properties.Resources.Image_File);
+            return imageList;
+        }
+
+        public abstract void BeginLoadingImages();
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src79', RANGES_79)
+		</script>
+	</body>
+</html>

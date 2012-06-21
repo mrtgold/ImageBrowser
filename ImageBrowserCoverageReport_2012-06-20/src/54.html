@@ -1,0 +1,268 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_54 = [
+   [22,57,22,58,'dccv']
+, [22,59,22,105,'dccv']
+, [22,106,22,107,'dccv']
+, [29,13,29,14,'dccv']
+, [30,17,31,69,'dccv']
+, [31,108,31,110,'dccv']
+, [32,13,32,14,'dccv']
+, [38,13,38,14,'dccv']
+, [39,17,39,37,'dccv']
+, [40,21,40,54,'dccv']
+, [41,17,41,63,'dccv']
+, [42,21,42,51,'dccv']
+, [43,17,43,48,'dccv']
+, [44,13,44,14,'dccv']
+, [47,9,48,56,'dccv']
+, [49,9,49,10,'dccv']
+, [50,13,50,41,'dccv']
+, [51,13,51,31,'dccv']
+, [52,13,52,37,'dccv']
+, [53,13,53,39,'dccv']
+, [54,13,54,25,'dccv']
+, [55,9,55,10,'dccv']
+, [57,9,58,46,'dccv']
+, [59,9,59,10,'dccv']
+, [60,13,60,39,'dccv']
+, [61,13,61,25,'dccv']
+, [62,9,62,10,'dccv']
+, [65,9,65,10,'dccv']
+, [66,13,66,27,'dccv']
+, [68,13,68,14,'dccv']
+, [69,17,69,24,'dccv']
+, [69,40,69,64,'dccv']
+, [69,26,69,36,'dccv']
+, [70,17,70,18,'dccv']
+, [71,21,71,64,'dccv']
+, [72,17,72,18,'dccv']
+, [69,37,69,39,'dccv']
+, [73,13,73,14,'dccv']
+, [74,13,74,18,'dccv']
+, [75,13,75,14,'dccv']
+, [76,17,76,33,'dccv']
+, [77,17,77,29,'dccv']
+, [78,17,78,31,'dccv']
+, [79,13,79,14,'dccv']
+, [81,13,81,14,'dccv']
+, [82,17,82,44,'dccv']
+, [83,17,83,31,'dccv']
+, [84,13,84,14,'dccv']
+, [85,9,85,10,'dccv']
+, [88,9,88,10,'dccv']
+, [89,13,89,37,'dccv']
+, [90,9,90,10,'dccv']
+, [93,9,93,10,'dccv']
+, [94,13,94,38,'dccv']
+, [95,13,95,14,'dccv']
+, [96,17,96,35,'dccv']
+, [97,13,97,14,'dccv']
+, [98,9,98,10,'dccv']
+, [101,9,101,10,'dccv']
+, [102,13,102,80,'dccv']
+, [103,13,103,44,'dccv']
+, [104,13,104,52,'dccv']
+, [105,9,105,10,'dccv']
+, [108,9,108,10,'dccv']
+, [109,13,109,26,'dccv']
+, [110,17,110,107,'dccv']
+, [111,18,111,60,'dccv']
+, [112,17,112,108,'dccv']
+, [113,18,113,57,'dccv']
+, [114,17,114,105,'dccv']
+, [115,18,115,58,'dccv']
+, [116,13,116,14,'dccv']
+, [117,17,117,89,'dccv']
+, [118,17,118,92,'dccv']
+, [119,13,119,14,'dccv']
+, [120,9,120,10,'dccv']
+, [125,9,125,10,'dccv']
+, [126,13,127,69,'dccv']
+, [128,9,128,10,'dccv']
+, [131,9,131,10,'dccv']
+, [132,13,132,44,'dccv']
+, [132,45,132,58,'dccv']
+, [133,13,133,44,'dccv']
+, [133,45,133,57,'dccv']
+, [134,13,134,44,'dccv']
+, [134,45,134,58,'dccv']
+, [135,13,135,47,'dccv']
+, [136,9,136,10,'dccv']
+, [139,9,139,10,'dccv']
+, [140,13,140,66,'dccv']
+, [141,9,141,10,'dccv']
+, [144,9,144,10,'dccv']
+, [145,13,145,40,'dccv']
+, [146,9,146,10,'dccv']
+, [149,9,149,10,'dccv']
+, [150,13,150,41,'dccv']
+, [151,9,151,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src54" class="dotCoverSource"><pre>using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace DirectoryBrowser
+{
+    public class DirectoryNode : TreeNode
+    {
+        public enum TreeViewNodeType
+        {
+            Computer = 1,
+            Drive,
+            Folder
+        }
+
+        public DirectoryInfo RootDir { get; private set; }
+        private DirectoryNode ParentNode { get; set; }
+        public bool HasError { get; private set; }
+        private DirectoryBrowserImageList.TreeViewImages _expandedImageKey;
+        private DirectoryBrowserImageList.TreeViewImages _collapsedImageKey;
+        public IEnumerable&lt;DirectoryNode&gt; SubDirs { get { return Nodes.OfType&lt;DirectoryNode&gt;().ToList(); } }
+
+        public bool ThisLevelEnumerated { get; private set; }
+
+        public bool AllChildrenEnumerated
+        {
+            get
+            {
+                return ThisLevelEnumerated
+                    &amp;&amp; SubDirs.Aggregate(true, (current, subDir) =&gt; current &amp;&amp; subDir.AllChildrenEnumerated);
+            }
+        }
+
+        public TreeViewNodeType NodeType
+        {
+            get
+            {
+                if (RootDir == null)
+                    return TreeViewNodeType.Computer;
+                if (RootDir.Root.FullName == RootDir.FullName)
+                    return TreeViewNodeType.Drive;
+                return TreeViewNodeType.Folder;
+            }
+        }
+
+        public DirectoryNode(DirectoryInfo rootDir, DirectoryNode parentNode)
+            : base(rootDir == null ? &quot;&quot; : rootDir.Name)
+        {
+            ThisLevelEnumerated = false;
+            RootDir = rootDir;
+            ParentNode = parentNode;
+            Nodes.Add(new TreeNode()); // add dummy node to allow expansion
+            SetImages();
+        }
+
+        public DirectoryNode(DriveInfo drive)
+            : this(drive.RootDirectory, null)
+        {
+            Nodes.Add(new TreeNode()); // add dummy node to allow expansion
+            SetImages();
+        }
+
+        public void PopulateSubDirs()
+        {
+            Nodes.Clear();
+            try
+            {
+                foreach (var subDir in RootDir.GetDirectories())
+                {
+                    Nodes.Add(new DirectoryNode(subDir, this));
+                }
+            }
+            catch
+            {
+                HasError = true;
+                SetImages();
+                UpdateImage();
+            }
+            finally
+            {
+                ThisLevelEnumerated = true;
+                UpdateImage();
+            }
+        }
+
+        public override string ToString()
+        {
+            return RootDir.FullName;
+        }
+
+        public virtual void BeforeExpand()
+        {
+            if (!ThisLevelEnumerated)
+            {
+                PopulateSubDirs();
+            }
+        }
+
+        public virtual void UpdateImage()
+        {
+            var imageKey = IsExpanded ? _expandedImageKey : _collapsedImageKey;
+            ImageKey = imageKey.ToString();
+            SelectedImageKey = imageKey.ToString();
+        }
+
+        private void SetImages()
+        {
+            if (HasError)
+                _expandedImageKey = _collapsedImageKey = DirectoryBrowserImageList.TreeViewImages.Warning;
+            else if (NodeType == TreeViewNodeType.Computer)
+                _expandedImageKey = _collapsedImageKey = DirectoryBrowserImageList.TreeViewImages.Computer;
+            else if (NodeType == TreeViewNodeType.Drive)
+                _expandedImageKey = _collapsedImageKey = DirectoryBrowserImageList.TreeViewImages.Drive;
+            else if (NodeType == TreeViewNodeType.Folder)
+            {
+                _expandedImageKey = DirectoryBrowserImageList.TreeViewImages.OpenFolder;
+                _collapsedImageKey = DirectoryBrowserImageList.TreeViewImages.ClosedFolder;
+            }
+        }
+
+        #region Equality members
+
+        private bool Equals(DirectoryNode other)
+        {
+            return RootDir.FullName.Equals(other.RootDir.FullName)
+                   &amp;&amp; ReferenceEquals(ParentNode, other.ParentNode);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((DirectoryNode)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (RootDir != null ? RootDir.GetHashCode() : 0);
+        }
+
+        public static bool operator ==(DirectoryNode left, DirectoryNode right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(DirectoryNode left, DirectoryNode right)
+        {
+            return !Equals(left, right);
+        }
+
+        #endregion
+
+    }
+}
+
+</pre></code><script type="text/javascript">
+			applyranges('src54', RANGES_54)
+		</script>
+	</body>
+</html>

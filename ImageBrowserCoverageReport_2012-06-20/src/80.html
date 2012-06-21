@@ -1,0 +1,76 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_80 = [
+   [12,9,13,103,'dccv']
+, [14,9,14,10,'dccv']
+, [15,9,15,10,'dccv']
+, [18,9,18,10,'dccv']
+, [19,13,19,37,'dccv']
+, [20,9,20,10,'dccv']
+, [23,9,23,10,'dccv']
+, [24,13,24,20,'dccv']
+, [24,34,24,38,'dccv']
+, [24,22,24,30,'dccv']
+, [25,13,25,14,'dccv']
+, [26,17,26,43,'dccv']
+, [27,17,27,119,'dccv']
+, [28,13,28,14,'dccv']
+, [24,31,24,33,'dccv']
+, [29,9,29,10,'dccv']
+, [32,9,32,10,'dccv']
+, [33,13,33,42,'dccv']
+, [34,13,34,87,'dccv']
+, [35,13,35,38,'dccv']
+, [36,13,36,51,'dccv']
+, [37,13,37,33,'dccv']
+, [38,9,38,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src80" class="dotCoverSource"><pre>using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using ImageBrowserLogic.ImageProviders;
+
+namespace ImageBrowserLogic.LoadingStrategies
+{
+    public class ListViewFileSet_BlockingLoadAllImages : ListViewFileSetBase
+    {
+        public ListViewFileSet_BlockingLoadAllImages(DirectoryInfo dir, IImageProviderFactory factory, Action&lt;ListView&gt; initializeListView, params string[] filePatterns)
+            : base(dir, initializeListView, new SimpleBitmapThumbnailGetterFactory(100), filePatterns)
+        {
+        }
+
+        public override void BeginLoadingImages()
+        {
+            BlockingLoadAllImages();
+        }
+
+        private void BlockingLoadAllImages()
+        {
+            foreach (var node in this)
+            {
+                LoadImage(node, ListView);
+                Trace.WriteLine(string.Format(&quot;BlockingLoadAllImages:{0}: {1} remaining&quot;, Dir, FilesNotDone.Count()));
+            }
+        }
+
+        private void LoadImage(FileNode node, ListView targetListView)
+        {
+            var key = node.File.FullName;
+            var item = targetListView.Items.Add(key, node.File.Name, DefaultImageKey);
+            node.BlockingLoadImage();
+            ImageList.Images.Add(key, node.Image);
+            item.ImageKey = key;
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src80', RANGES_80)
+		</script>
+	</body>
+</html>

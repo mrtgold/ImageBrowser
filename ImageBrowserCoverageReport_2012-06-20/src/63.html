@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_63 = [
+  ];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src63" class="dotCoverSource"><pre>using ImageBrowserLogic.LoadingStrategies;
+using ImageBrowserLogicTests.ImageProviders;
+using NUnit.Framework;
+
+namespace ImageBrowserLogicTests.LoadingStrategies
+{
+    [TestFixture]
+    public class BlockingLoadFilesAsyncListViewFileSetFactoryShould : ListViewFileSetTeater
+    {
+        [Test]
+        public void Build()
+        {
+            var factory = new BlockingLoadFilesAsyncListViewFileSetFactory(new StubImageProviderFactory(),InitializeListView );
+            var fileSet = factory.Build(TargetDirectory,null);
+
+            Assert.IsInstanceOf&lt;ListViewFileSet_BlockingLoadFilesAsyncLoadImages&gt;(fileSet);
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src63', RANGES_63)
+		</script>
+	</body>
+</html>

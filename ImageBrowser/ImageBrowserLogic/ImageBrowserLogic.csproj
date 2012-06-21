@@ -55,14 +55,10 @@
     <Compile Include="ImageProviders\SimpleBitmapThumbnailGetterFactory.cs" />
     <Compile Include="LoadingStrategies\BlockingLoadFilesAsyncListViewFileSetFactory.cs" />
     <Compile Include="LoadingStrategies\ListViewFileSetBase.cs" />
-    <Compile Include="LoadingStrategies\ListViewFileSet_BlockingLoadAllDefaultImages.cs" />
     <Compile Include="LoadingStrategies\ListViewFileSet_BlockingLoadAllImages.cs" />
     <Compile Include="LoadingStrategies\ListViewFileSet_BlockingLoadFilesAsyncLoadImages.cs" />
-    <Compile Include="LoadingStrategies\ListViewFileSet_LoadFilesBlockingLoadImages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ImageProviders\SimpleBitmapThumbnailGetter.cs" />
-    <Compile Include="Thumbnail.cs" />
-    <Compile Include="Thumbnails.cs" />
     <Compile Include="ThumbnailSets.cs" />
   </ItemGroup>
   <ItemGroup>

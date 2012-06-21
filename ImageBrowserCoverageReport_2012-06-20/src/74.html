@@ -1,0 +1,95 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_74 = [
+   [12,9,12,116,'dccv']
+, [13,9,13,10,'dccv']
+, [14,13,14,23,'dccv']
+, [15,13,15,50,'dccv']
+, [18,13,18,14,'dccv']
+, [19,17,19,65,'dccv']
+, [20,21,20,56,'dccv']
+, [22,17,22,18,'dccv']
+, [23,21,23,28,'dccv']
+, [23,49,23,61,'dccv']
+, [23,30,23,45,'dccv']
+, [24,25,24,71,'dccv']
+, [23,46,23,48,'dccv']
+, [25,17,25,18,'dccv']
+, [27,17,27,24,'dccv']
+, [27,42,27,67,'dccv']
+, [27,162,27,163,'dccv']
+, [27,26,27,38,'dccv']
+, [28,17,28,18,'dccv']
+, [29,21,29,35,'dccv']
+, [30,17,30,18,'dccv']
+, [27,39,27,41,'dccv']
+, [31,13,31,14,'dccv']
+, [32,13,32,18,'dccv']
+, [33,13,33,14,'dccv']
+, [34,13,34,14,'dccv']
+, [35,9,35,10,'dccv']
+, [39,17,39,18,'dccv']
+, [39,19,39,42,'dccv']
+, [39,49,39,51,'dccv']
+, [39,52,39,53,'dccv']
+, [44,17,44,18,'dccv']
+, [44,19,44,46,'dccv']
+, [44,47,44,48,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src74" class="dotCoverSource"><pre>using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using ImageBrowserLogic.ImageProviders;
+
+namespace ImageBrowserLogic
+{
+    public class FileSet : List&lt;FileNode&gt;, IFileSet
+    {
+        public DirectoryInfo Dir { get; private set; }
+
+        public FileSet(DirectoryInfo dir, IImageProviderFactory imageProviderFactory, params string[] filePatterns)
+        {
+            Dir = dir;
+            var fileInfos = new List&lt;FileInfo&gt;();
+
+            try
+            {
+                if (filePatterns == null || !filePatterns.Any())
+                    fileInfos.AddRange(Dir.GetFiles());
+                else
+                {
+                    foreach (var filePattern in filePatterns)
+                        fileInfos.AddRange(Dir.GetFiles(filePattern));
+                }
+
+                foreach (var fileNode in fileInfos.Select(file =&gt; new FileNode(file, this, BrowserResources.Properties.Resources.Image_File,imageProviderFactory)))
+                {
+                    Add(fileNode);
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        public IEnumerable&lt;FileNode&gt; FilesNotDone
+        {
+            get { return this.Where(f =&gt; !f.Done); }
+        }
+
+        public bool Done
+        {
+            get { return !FilesNotDone.Any(); }
+        }
+
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src74', RANGES_74)
+		</script>
+	</body>
+</html>

@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_61 = [
+  ];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src61" class="dotCoverSource"><pre>using ImageBrowserLogic.ImageProviders;
+
+namespace ImageBrowserLogicTests.ImageProviders
+{
+    internal class StubImageProviderFactory : IImageProviderFactory
+    {
+        public StubImageProvider Provider;
+
+        public IImageProvider Build()
+        {
+            return Provider ?? (Provider = new StubImageProvider());
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src61', RANGES_61)
+		</script>
+	</body>
+</html>

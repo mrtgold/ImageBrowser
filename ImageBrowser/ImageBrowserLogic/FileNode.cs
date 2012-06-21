@@ -9,18 +9,17 @@ namespace ImageBrowserLogic
     public class FileNode
     {
         private readonly IImageProviderFactory _factory;
-        public FileInfo File { get; set; }
+        public FileInfo File { get; private set; }
         public FileSet ParentNode { get; set; }
-        public Image Image { get; set; }
+        public Image Image { get; private set; }
 
-        public bool Done { get; set; }
+        public bool Done { get; private set; }
         public string Key { get { return File.FullName; } }
 
         private IImageProvider _imageGetter;
         public IImageProvider ImageGetter
         {
             get { return _imageGetter ?? (_imageGetter = _factory.Build()); }
-            set { _imageGetter = value; }
         }
 
         public FileNode(FileInfo file, FileSet parent, Image defaultImage, IImageProviderFactory factory)
@@ -34,10 +33,8 @@ namespace ImageBrowserLogic
 
         public void BlockingLoadImage()
         {
-            var getter = new FullSizeImageGetter();
-
-            var result = getter.BeginGetImage(null, File.FullName);
-            Image = getter.EndGetImage(result);
+            var result = ImageGetter.BeginGetImage(null, File.FullName);
+            Image = ImageGetter.EndGetImage(result);
             Done = true;
 
         }
@@ -63,6 +60,7 @@ namespace ImageBrowserLogic
                 fileSet.ImageList.Images.Add(node.Key, node.Image);
 
                 fileSet.ListView.Items[node.Key].ImageKey = node.Key;
+                node.Done = true;
                 Trace.WriteLine(string.Format("Updated image file {0}", node.Key));
             }
         }

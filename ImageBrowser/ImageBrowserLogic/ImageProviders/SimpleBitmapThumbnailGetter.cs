@@ -6,11 +6,11 @@ namespace ImageBrowserLogic.ImageProviders
 {
     public class SimpleBitmapThumbnailGetter : ImageGetterBase
     {
-        private readonly int _thumbnailSize;
+        public int ThumbnailSize { get; private set; }
 
         public SimpleBitmapThumbnailGetter(int thumbnailSizeInPixels)
         {
-            _thumbnailSize = thumbnailSizeInPixels;
+            ThumbnailSize = thumbnailSizeInPixels;
         }
 
         protected override AsyncImageFromFileCaller GetImageGetter()
@@ -22,7 +22,7 @@ namespace ImageBrowserLogic.ImageProviders
         {
             using (var image = Image.FromFile(filename))
             {
-                var thumb = GetThumbnail(image, _thumbnailSize);
+                var thumb = GetThumbnail(image, ThumbnailSize);
                 return thumb;
             }
         }

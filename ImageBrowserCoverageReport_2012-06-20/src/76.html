@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_76 = [
+   [8,9,8,10,'dccv']
+, [9,13,9,36,'dccv']
+, [10,9,10,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src76" class="dotCoverSource"><pre>using System.Drawing;
+
+namespace ImageBrowserLogic.ImageProviders
+{
+    public class FullSizeImageGetter : ImageGetterBase
+    {
+        protected override AsyncImageFromFileCaller GetImageGetter()
+        {
+            return  Image.FromFile;
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src76', RANGES_76)
+		</script>
+	</body>
+</html>

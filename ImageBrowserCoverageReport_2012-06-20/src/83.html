@@ -1,0 +1,117 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_83 = [
+   [14,9,14,111,'dccv']
+, [15,9,15,10,'dccv']
+, [16,13,16,36,'dccv']
+, [17,13,17,42,'dccv']
+, [18,13,18,46,'dccv']
+, [19,9,19,10,'dccv']
+, [22,9,22,10,'dccv']
+, [23,13,23,35,'dccv']
+, [24,13,24,14,'dccv']
+, [25,17,25,81,'dccv']
+, [26,17,26,45,'dccv']
+, [27,17,27,54,'dccv']
+, [29,17,29,40,'dccv']
+, [32,13,32,30,'dccv']
+, [33,9,33,10,'dccv']
+, [36,9,36,10,'dccv']
+, [37,13,37,43,'dccv']
+, [38,13,38,59,'dccv']
+, [40,13,40,72,'dccv']
+, [40,73,40,80,'dccv']
+, [43,13,43,78,'dccv']
+, [44,13,44,14,'dccv']
+, [45,17,45,44,'dccv']
+, [46,17,46,105,'dccv']
+, [48,17,48,67,'dccv']
+, [49,17,49,95,'dccv']
+, [56,17,56,62,'dccv']
+, [57,17,57,98,'dccv']
+, [59,17,59,47,'dccv']
+, [60,17,60,104,'dccv']
+, [61,17,61,61,'dccv']
+, [62,13,62,14,'dccv']
+, [64,13,64,23,'dccv']
+, [66,13,66,112,'dccv']
+, [67,9,67,10,'dccv']
+];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src83" class="dotCoverSource"><pre>using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
+
+namespace ImageBrowserLogic
+{
+    public class ThumbnailSets : Dictionary&lt;DirectoryInfo, IListViewFileSet&gt;
+    {
+        private readonly Control _container;
+        private readonly string[] _filePatterns;
+        private readonly IListViewFileSetFactory _fileSetFactory;
+
+        public ThumbnailSets(Control container, string[] filePatterns, IListViewFileSetFactory fileSetFactory)
+        {
+            _container = container;
+            _filePatterns = filePatterns;
+            _fileSetFactory = fileSetFactory;
+        }
+
+        private IListViewFileSet GetListViewFileSet(DirectoryInfo dir)
+        {
+            if (!ContainsKey(dir))
+            {
+                var listViewFileSet = _fileSetFactory.Build(dir, _filePatterns);
+                this[dir] = listViewFileSet;
+                listViewFileSet.BeginLoadingImages();
+
+                return listViewFileSet;
+            }
+
+            return this[dir];
+        }
+
+        public void DisplayList(DirectoryInfo dir, ref ListView previousListView)
+        {
+            var sw = Stopwatch.StartNew();
+            var listViewFileSet = GetListViewFileSet(dir);
+
+            if (_container == null || listViewFileSet.ListView == null) return;
+
+            //if (!_container.Controls.Contains(listViewFileSet.ListView))
+            if (!ReferenceEquals(previousListView, listViewFileSet.ListView))
+            {
+                _container.SuspendLayout();
+                Trace.WriteLine(string.Format(&quot;after SuspendLayout: {0} msec&quot;, sw.ElapsedMilliseconds));
+
+                _container.Controls.Add(listViewFileSet.ListView);
+                Trace.WriteLine(string.Format(&quot;after add: {0} msec&quot;, sw.ElapsedMilliseconds));
+
+                //foreach (var control in _container.Controls.OfType&lt;ListView&gt;().Where(c =&gt; !ReferenceEquals(c,listViewFileSet.ListView)))
+                //{
+                //    _container.Controls.Remove(control);
+                //}
+
+                _container.Controls.Remove(previousListView);
+                Trace.WriteLine(string.Format(&quot;after remove: {0} msec&quot;, sw.ElapsedMilliseconds));
+
+                _container.ResumeLayout(true);
+                Trace.WriteLine(string.Format(&quot;after ResumeLayout: {0} msec&quot;, sw.ElapsedMilliseconds));
+                previousListView = listViewFileSet.ListView;
+            }
+
+            sw.Stop();
+
+            Trace.WriteLine(string.Format(&quot;loaded dir {0} in {1} msec&quot;, dir.FullName, sw.ElapsedMilliseconds));
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src83', RANGES_83)
+		</script>
+	</body>
+</html>

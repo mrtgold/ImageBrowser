@@ -6,9 +6,9 @@ using ImageBrowserPresenter;
 
 namespace ImageBrowser
 {
-    public partial class Form2 : Form, IImageBrowserView2
+    public partial class Form2 : Form, IImageBrowserView
     {
-        private ImageBrowserPresenter2 _presenter;
+        private ImageBrowserPresenter.Presenter _presenter;
         private readonly Control _listViewParentContainer;
         public event ImageBrowserViewDirectorySelectedHandler DirectorySelected;
         public event ImageBrowserViewEventDelegate2 BrowserViewLoad;
@@ -16,7 +16,7 @@ namespace ImageBrowser
         public Form2()
         {
             InitializeComponent();
-            _presenter = new ImageBrowserPresenter2(this);
+            _presenter = new ImageBrowserPresenter.Presenter(this);
             _listViewParentContainer = listView1.Parent;
         }
 

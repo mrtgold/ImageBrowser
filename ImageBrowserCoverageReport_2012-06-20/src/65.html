@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_65 = [
+  ];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src65" class="dotCoverSource"><pre>using System;
+using ImageBrowserLogic;
+using ImageBrowserLogic.LoadingStrategies;
+using ImageBrowserLogicTests.ImageProviders;
+using NUnit.Framework;
+
+namespace ImageBrowserLogicTests.LoadingStrategies
+{
+    [TestFixture]
+    public class ListViewFileSetBlockingLoadAllImagesShould : ListViewFileSetTeater
+    {
+        private MockImageProviderFactory _factory;
+
+        [SetUp]
+        public override void Setup()
+        {
+            base.Setup();
+            InitializeListView_WasCalled = false;
+            _factory = new MockImageProviderFactory();
+            _file1 = MakeImageFile();
+        }
+
+        [Test]
+        public void Make()
+        {
+            var fileSet = new ListViewFileSet_BlockingLoadAllImages(TargetDirectory, _factory, InitializeListView, &quot;*.jpg&quot;);
+            Assert.IsTrue(InitializeListView_WasCalled);
+            Assert.AreEqual(0, fileSet.ListView.Items.Count);
+        }
+
+
+        [Test]
+        public void LoadFiles()
+        {
+            var fileSet = new ListViewFileSet_BlockingLoadAllImages(TargetDirectory, _factory, InitializeListView, &quot;*.jpg&quot;);
+            fileSet.BeginLoadingImages();
+
+            Assert.IsTrue(fileSet.ListView.Items.ContainsKey(_file1));
+            Assert.IsFalse(string.IsNullOrEmpty(fileSet.StatusMessage));
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src65', RANGES_65)
+		</script>
+	</body>
+</html>

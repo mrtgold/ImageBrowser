@@ -4,9 +4,11 @@ namespace ImageBrowserLogicTests.ImageProviders
 {
     internal class MockImageProviderFactory : IImageProviderFactory
     {
+        public MockImageProvider Provider;
+
         public IImageProvider Build()
         {
-            return new MockImageProvider();
+            return Provider ?? (Provider = new MockImageProvider());
         }
     }
 }

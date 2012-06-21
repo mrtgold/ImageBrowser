@@ -8,6 +8,14 @@ namespace ImageBrowserLogicTests
     public class FileNodeShould :DirectoryTester
     {
         [Test]
+        public void GiveFullNameAsKey()
+        {
+            var file1 = new FileInfo(@"C:\file1.txt");
+            var node = new FileNode(file1, null, null, null);
+            Assert.AreEqual(file1.FullName, node.Key);
+        }
+
+        [Test]
         public void ValidateEquality()
         {
             var file1 = new FileInfo(@"C:\file1.txt");

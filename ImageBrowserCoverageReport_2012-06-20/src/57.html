@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/coverreport.js">
+
+		</script><script type="text/javascript">
+			RANGES_57 = [
+  ];
+		</script><link rel="stylesheet" type="text/css" href="../css/coverreport.css" />
+	</head><body>
+		<code id="src57" class="dotCoverSource"><pre>using System.IO;
+using NUnit.Framework;
+
+namespace ImageBrowserLogicTests
+{
+    public class DirectoryTester
+    {
+        protected DirectoryInfo TargetDirectory;
+
+        [SetUp]
+        public virtual void Setup()
+        {
+            var targetDirName = &quot;TargetDirectory_&quot;+ Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
+            var dirTesterDirName = (GetType().Namespace ?? &quot;NoNameSpace&quot;).Replace(&#39;.&#39;,&#39;_&#39;)+&quot;_&quot; + GetType().Name + &quot;_DirectoryTester&quot;;
+            var dirTesterPath = Path.Combine(Path.GetTempPath(), dirTesterDirName);
+            TargetDirectory = Directory.CreateDirectory(Path.Combine(dirTesterPath, targetDirName));
+        }
+        [TearDown]
+        public void TearDown()
+        {
+            TargetDirectory.Delete(true);
+        }
+    }
+}</pre></code><script type="text/javascript">
+			applyranges('src57', RANGES_57)
+		</script>
+	</body>
+</html>

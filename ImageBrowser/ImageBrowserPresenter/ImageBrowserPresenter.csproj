@@ -40,11 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IImageBrowserView2.cs" />
     <Compile Include="IImageBrowserView.cs" />
-    <Compile Include="ImageBrowserPresenter.cs" />
-    <Compile Include="ImageBrowserPresenter2.cs" />
-    <Compile Include="IThumbnailDisplayer.cs" />
+    <Compile Include="Presenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
